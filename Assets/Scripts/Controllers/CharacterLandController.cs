@@ -57,13 +57,12 @@ public class CharacterLandController : MonoBehaviour
     private void FixedUpdate()
     {
         //LOOK
-        //_playerLookInput = GetLookInput();
-        //PlayerLook();
-        //PitchCamera(); 
+        _playerLookInput = GetLookInput();
+        PlayerLook();
+        PitchCamera(); 
 
         //MOVEMENT
-        _playerMoveInput = GetMoveInputNew(); //Get Data from InputSystem
-        HandleRotation(); 
+        _playerMoveInput = GetMoveInput(); //Get Data from InputSystem
         _playerIsGrounded = PlayerGroundCheck();
         _playerMoveInput.y = PlayerGravity();
 
@@ -81,17 +80,6 @@ public class CharacterLandController : MonoBehaviour
         return new Vector3(_input.MoveInput.x, 0.0f, _input.MoveInput.y);  
     }
 
-    private Vector3 GetMoveInputNew()
-    {
-        Vector3 moveDirection = Vector3.zero;
-        moveDirection = new Vector3(cameraFollow.forward.x, 0f, cameraFollow.forward.z) * _input.MoveInput.y;
-        moveDirection = moveDirection + cameraFollow.right * _input.MoveInput.x;
-        moveDirection.Normalize();
-        moveDirection.y = 0;
-        moveDirection = moveDirection * _movementMultiplier;
-
-        return moveDirection;
-    }
 
     private bool PlayerGroundCheck()
     {
@@ -168,26 +156,6 @@ public class CharacterLandController : MonoBehaviour
         {
             _animator.SetBool(_isRunningHash, false);
         }
-
-    }
-
-    private void HandleRotation()
-    {
-        Vector3 targetDirection = Vector3.zero;
-        targetDirection = cameraFollow.forward * _input.MoveInput.y;
-        targetDirection = targetDirection + cameraFollow.right * _input.MoveInput.x;
-        targetDirection.Normalize();
-        targetDirection.y = 0;
-
-        if (targetDirection == Vector3.zero)
-        {
-            targetDirection = transform.forward;
-        }
-
-        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeedMultiplier * Time.deltaTime);
-
-        _rb.rotation = playerRotation;
 
     }
 
