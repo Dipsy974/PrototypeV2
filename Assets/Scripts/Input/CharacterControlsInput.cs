@@ -10,6 +10,8 @@ public class CharacterControlsInput : MonoBehaviour
     public bool InvertMouseY { get; private set; } = true;
 
     public bool CameraChangeIsPressed { get; private set; } = false; 
+    
+    public bool RollIsPressed { get; private set; } = false; 
 
     InputActions _input;
 
@@ -39,6 +41,7 @@ public class CharacterControlsInput : MonoBehaviour
     private void Update()
     {
         CameraChangeIsPressed = _input.CharacterControls.ChangeCamera.WasPressedThisFrame(); 
+        RollIsPressed = _input.CharacterControls.Roll.WasPressedThisFrame();
     }
 
     private void SetMove(InputAction.CallbackContext ctx)
