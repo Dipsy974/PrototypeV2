@@ -8,7 +8,6 @@ public class NewCharacterLandController : MonoBehaviour
     [SerializeField] private CharacterControlsInput _input;
     private Rigidbody _rb;
     private CapsuleCollider _capsuleCollider;
-    //private CharacterController _characterController;
     private Animator _animator;
 
 
@@ -40,6 +39,16 @@ public class NewCharacterLandController : MonoBehaviour
 
     private float _rotationFactorPerFrame = 15.0f;
 
+    //GETTERS AND SETTERS
+    public Rigidbody RB { get { return _rb; } }
+    public CapsuleCollider CapCollider { get { return _capsuleCollider; } }
+    public Animator Animator { get { return _animator; } }
+    public Vector3 PlayerMoveInput { get { return _playerMoveInput; } private set { } }
+    public bool PlayerIsGrounded { get { return _playerIsGrounded; } private set { } }
+
+
+
+
     //public float runMultiplyer;
 
     private void Awake()
@@ -62,6 +71,7 @@ public class NewCharacterLandController : MonoBehaviour
     {
 
         HandleRotation();
+        PlayerLook(); 
 
         HandleAnimation();
 
@@ -90,6 +100,11 @@ public class NewCharacterLandController : MonoBehaviour
        
 
         return calculatedPlayerMovement;
+    }
+
+    private void PlayerLook()
+    {
+        _rb.rotation = Quaternion.Euler(0.0f, Camera.main.transform.rotation.y, 0.0f);
     }
 
     private void HandleAnimation()
@@ -183,5 +198,10 @@ public class NewCharacterLandController : MonoBehaviour
     private Vector3 GetMoveInput()
     {
         return new Vector3(_input.MoveInput.x, 0.0f, _input.MoveInput.y);
+    }
+
+    private void CheckFocusCamera()
+    {
+       
     }
 }

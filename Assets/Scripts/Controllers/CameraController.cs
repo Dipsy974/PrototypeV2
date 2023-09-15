@@ -7,12 +7,12 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private CharacterControlsInput _input;
 
-    private CinemachineVirtualCamera _activeCamera;
+    private CinemachineFreeLook _activeCamera;
     private int _activeCameraPriorityModifier = 100;
 
     public Camera mainCamera;
-    public CinemachineVirtualCamera _thirdPersonCamera;
-    public CinemachineVirtualCamera _focusCamera;
+    public CinemachineFreeLook _thirdPersonCamera;
+    public CinemachineFreeLook _focusCamera;
    
 
     ////USELESS FOR NOW
@@ -49,7 +49,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    private void SetCameraPriority(CinemachineVirtualCamera currentCameraMode, CinemachineVirtualCamera newCameraMode)
+    private void SetCameraPriority(CinemachineFreeLook currentCameraMode, CinemachineFreeLook newCameraMode)
     {
         currentCameraMode.Priority -= _activeCameraPriorityModifier;
         newCameraMode.Priority += _activeCameraPriorityModifier;
