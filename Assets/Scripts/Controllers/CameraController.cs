@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
 
     private CinemachineFreeLook _activeCamera;
     private int _activeCameraPriorityModifier = 100;
+    private bool _isLiveBlend = false; 
 
     public Camera mainCamera;
     public CinemachineFreeLook _thirdPersonCamera;
@@ -17,6 +18,7 @@ public class CameraController : MonoBehaviour
 
     //GETTERS AND SETTERS 
     public CinemachineFreeLook ActiveCamera { get { return _activeCamera; } private set { } }
+    public bool IsLiveBlend { get { return _isLiveBlend; } private set { } }
 
     ////USELESS FOR NOW
     //public bool UsingOrbitalCamera { get; private set; } = false;
@@ -30,6 +32,8 @@ public class CameraController : MonoBehaviour
     private void Update()
     {
         if (_input.CameraChangeIsPressed) { ChangeCamera(); }
+
+        _isLiveBlend = mainCamera.GetComponent<CinemachineBrain>().IsLiveInBlend(_thirdPersonCamera);
     }
 
     private void SetFirstCamera()
@@ -42,12 +46,10 @@ public class CameraController : MonoBehaviour
         if(_activeCamera == _thirdPersonCamera)
         {
             SetCameraPriority(_thirdPersonCamera, _focusCamera);
-            _activeCamera.LookAt.GetChild(0).gameObject.SetActive(true);
 
         }
         else if(_activeCamera == _focusCamera)
         {
-            _activeCamera.LookAt.GetChild(0).gameObject.SetActive(false);
             SetCameraPriority(_focusCamera, _thirdPersonCamera);
         }
     }
