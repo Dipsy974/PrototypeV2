@@ -12,6 +12,7 @@ public class CharacterControlsInput : MonoBehaviour
     public bool CameraChangeIsPressed { get; private set; } = false; 
     
     public bool RollIsPressed { get; private set; } = false; 
+    public bool JumpIsPressed { get; private set; } = false; 
 
     InputActions _input;
     
@@ -27,6 +28,9 @@ public class CharacterControlsInput : MonoBehaviour
 
         _input.CharacterControls.Look.performed += SetLook;
         _input.CharacterControls.Look.canceled += SetLook;
+
+        _input.CharacterControls.Jump.performed += SetJump;
+        _input.CharacterControls.Jump.canceled += SetJump;
     }
 
     private void OnDisable()
@@ -36,6 +40,9 @@ public class CharacterControlsInput : MonoBehaviour
 
         _input.CharacterControls.Look.performed -= SetLook;
         _input.CharacterControls.Look.canceled -= SetLook;
+
+        _input.CharacterControls.Jump.performed -= SetJump;
+        _input.CharacterControls.Jump.canceled -= SetJump;
 
         _input.CharacterControls.Disable();
     }
@@ -50,6 +57,11 @@ public class CharacterControlsInput : MonoBehaviour
     {
         MoveInput = ctx.ReadValue<Vector2>();
         MoveIsPressed = !(MoveInput == Vector2.zero); 
+    }
+
+    private void SetJump(InputAction.CallbackContext ctx)
+    {
+        JumpIsPressed = ctx.started;
     }
 
     private void SetLook(InputAction.CallbackContext ctx)

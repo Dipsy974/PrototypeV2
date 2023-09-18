@@ -57,8 +57,10 @@ public class CharacterRoll : MonoBehaviour
         _characterController.Animator.SetBool(_isRollingHash, true);
         _canRoll = false;
         _isRolling = true;
+        _characterController.IsRolling = true;
         yield return new WaitForSeconds(_rollTime);
         _isRolling = false;
+        _characterController.IsRolling = false;
         _characterController.Animator.SetBool(_isRollingHash, false);
         StartCoroutine(TriggerRollCooldown());
     }

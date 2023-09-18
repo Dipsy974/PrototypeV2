@@ -18,6 +18,8 @@ public class NewCharacterLandController : MonoBehaviour
     private Vector3 _cameraRelativeMovement;
     [SerializeField] private float _movementSpeed;
 
+    private bool _isRolling = false; 
+
 
     [Header("Ground Check")]
     [SerializeField] private bool _playerIsGrounded = true;
@@ -34,6 +36,19 @@ public class NewCharacterLandController : MonoBehaviour
     [SerializeField] private float _playerFallTimer = 0.0f;
     [SerializeField] private float _gravity = 0.0f;
 
+    [Header("Jump")]
+    [SerializeField] float _initialJumpForce = 750.0f;
+    [SerializeField] float _continualJumpForceMultiplier = 0.1f;
+    [SerializeField] float _jumpTime = 0.175f;
+    [SerializeField] float _jumpTimeCounter = 0.0f;
+    [SerializeField] float _coyoteTime = 0.15f;
+    [SerializeField] float _coyoteTimeCounter = 0.0f;
+    [SerializeField] float _jumpBufferTime = 0.2f;
+    [SerializeField] float _jumpBufferTimeCounter = 0.0f;
+    [SerializeField] bool _playerIsJumping = false;
+    [SerializeField] bool _jumpWasPressedLastFrame = false; 
+    
+
 
     private int _isRunningHash;
    
@@ -46,6 +61,7 @@ public class NewCharacterLandController : MonoBehaviour
     public Animator Animator { get { return _animator; } }
     public Vector3 PlayerMoveInput { get { return _playerMoveInput; } private set { } }
     public bool PlayerIsGrounded { get { return _playerIsGrounded; } private set { } }
+    public bool IsRolling { get { return _isRolling; }  set { _isRolling = value; } }
 
 
 
@@ -76,8 +92,10 @@ public class NewCharacterLandController : MonoBehaviour
         }
         else
         {
-            AdjustFocusCamera(); 
-            HandleRotation();
+            if (!_isRolling)
+            {
+                HandleRotation();
+            }
         }
 
    
@@ -89,13 +107,17 @@ public class NewCharacterLandController : MonoBehaviour
         //MOVEMENT
         _playerMoveInput = GetMoveInput(); //Get Data from InputSystem
         _playerIsGrounded = PlayerGroundCheck();
+
         _playerMoveInput.y = PlayerGravity();
+        _playerMoveInput.y = PlayerJump();
 
         _appliedMovement = PlayerMove();
         _cameraRelativeMovement = ConvertToCameraSpace(_appliedMovement);
 
-
-        _rb.AddForce(_cameraRelativeMovement, ForceMode.Force);
+        if (!_isRolling)
+        {
+            _rb.AddForce(_cameraRelativeMovement, ForceMode.Force);
+        }
 
 
     }
@@ -211,20 +233,26 @@ public class NewCharacterLandController : MonoBehaviour
         return new Vector3(_input.MoveInput.x, 0.0f, _input.MoveInput.y);
     }
 
+    private void PlayerJump()
+    {
+        float calculatedJumpInput = _playerMoveInput.y;
+
+        //SetJumpTimeCounter();
+        //SetCoyoteTimeCounter();
+        //SetJumpBufferTimeCounter();
+
+        if(_jumpBufferTimeCounter > 0.0f && !_playerIsJumping && _coyoteTimeCounter > 0.0f)
+        {
+            calculatedJumpInput = _initialJumpForce;
+            _playerIsJumping = true;
+            
+        }
+    }
+
     private bool CheckFocusCamera()
     {
         return _camController.ActiveCamera == _camController._focusCamera;  //&& !_camController.IsLiveBlend; 
     }
 
-    //Function to adjust focus camera behind player during 3rd person camera
-    private void AdjustFocusCamera()
-    {
-        Vector3 positionToLookAt;
-
-        positionToLookAt.x = transform.rotation.x;
-        positionToLookAt.y = 0f;
-        positionToLookAt.z = transform.rotation.z;
-
-        _camController._focusCamera.transform.rotation = Quaternion.Euler(positionToLookAt);
-    }
+   
 }
