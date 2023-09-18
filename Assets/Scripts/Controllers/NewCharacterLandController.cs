@@ -233,7 +233,7 @@ public class NewCharacterLandController : MonoBehaviour
         return new Vector3(_input.MoveInput.x, 0.0f, _input.MoveInput.y);
     }
 
-    private void PlayerJump()
+    private float PlayerJump()
     {
         float calculatedJumpInput = _playerMoveInput.y;
 
@@ -247,6 +247,8 @@ public class NewCharacterLandController : MonoBehaviour
             _playerIsJumping = true;
             
         }
+
+        return 0;
     }
 
     private bool CheckFocusCamera()
