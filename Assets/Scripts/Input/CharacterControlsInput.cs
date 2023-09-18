@@ -29,7 +29,7 @@ public class CharacterControlsInput : MonoBehaviour
         _input.CharacterControls.Look.performed += SetLook;
         _input.CharacterControls.Look.canceled += SetLook;
 
-        _input.CharacterControls.Jump.performed += SetJump;
+        _input.CharacterControls.Jump.started += SetJump;
         _input.CharacterControls.Jump.canceled += SetJump;
     }
 

@@ -51,6 +51,7 @@ public class NewCharacterLandController : MonoBehaviour
 
 
     private int _isRunningHash;
+    private int _isJumpingHash;
    
 
     private float _rotationFactorPerFrame = 15.0f;
@@ -76,6 +77,7 @@ public class NewCharacterLandController : MonoBehaviour
 
 
         _isRunningHash = Animator.StringToHash("isRunning");
+        _isJumpingHash = Animator.StringToHash("isJumping");
 
         //LOGIQUE POUR CACHER LE CURSEUR, A PLACER AILLEURS
         Cursor.lockState = CursorLockMode.Locked;
@@ -142,7 +144,7 @@ public class NewCharacterLandController : MonoBehaviour
 
     private void HandleAnimation()
     {
-        bool isRunning = _animator.GetBool(_isRunningHash);
+        bool isRunningAnimating = _animator.GetBool(_isRunningHash);
 
         //Walking handling
         if (_input.MoveIsPressed)
@@ -152,6 +154,16 @@ public class NewCharacterLandController : MonoBehaviour
         else
         {
             _animator.SetBool(_isRunningHash, false);
+        }
+
+        //Jumping handling
+        if (_playerIsJumping)
+        {
+            _animator.SetBool(_isJumpingHash, true);
+        }
+        else if (!_playerIsJumping || _playerIsGrounded)
+        {
+            _animator.SetBool(_isJumpingHash, false);
         }
 
     }
@@ -233,20 +245,71 @@ public class NewCharacterLandController : MonoBehaviour
         return new Vector3(_input.MoveInput.x, 0.0f, _input.MoveInput.y);
     }
 
-    private void PlayerJump()
+    private float PlayerJump()
     {
+ 
         float calculatedJumpInput = _playerMoveInput.y;
 
-        //SetJumpTimeCounter();
-        //SetCoyoteTimeCounter();
-        //SetJumpBufferTimeCounter();
+        SetJumpTimeCounter();
+        SetCoyoteTimeCounter();
+        SetJumpBufferTimeCounter();
 
         if(_jumpBufferTimeCounter > 0.0f && !_playerIsJumping && _coyoteTimeCounter > 0.0f)
         {
             calculatedJumpInput = _initialJumpForce;
             _playerIsJumping = true;
+            _jumpBufferTimeCounter = 0.0f;
+            _coyoteTimeCounter = 0.0f;
             
         }
+        else if (_input.JumpIsPressed && _playerIsJumping && !_playerIsGrounded && _jumpTimeCounter > 0.0f)
+        {
+            calculatedJumpInput = _initialJumpForce * _continualJumpForceMultiplier;
+        }
+        else if(_playerIsJumping && _playerIsGrounded)
+        {
+            _playerIsJumping = false;
+        }
+
+
+        return calculatedJumpInput; 
+    }
+
+    private void SetJumpTimeCounter()
+    {
+        if(_playerIsJumping && !_playerIsGrounded)
+        {
+            _jumpTimeCounter -= Time.fixedDeltaTime;
+        }
+        else
+        {
+            _jumpTimeCounter = _jumpTime; 
+        }
+    }
+
+    private void SetCoyoteTimeCounter()
+    {
+        if (_playerIsGrounded)
+        {
+            _coyoteTimeCounter = _coyoteTime;
+        }
+        else
+        {
+            _coyoteTimeCounter -= Time.fixedDeltaTime;
+        }
+    }
+
+    private void SetJumpBufferTimeCounter()
+    {
+        if(!_jumpWasPressedLastFrame && _input.JumpIsPressed)
+        {
+            _jumpBufferTimeCounter = _jumpBufferTime;
+
+        }else if(_jumpBufferTimeCounter > 0.0f)
+        {
+            _jumpBufferTimeCounter -= Time.fixedDeltaTime;
+        }
+        _jumpWasPressedLastFrame = _input.JumpIsPressed; 
     }
 
     private bool CheckFocusCamera()
