@@ -13,7 +13,10 @@ public class CameraController : MonoBehaviour
     public Camera mainCamera;
     public CinemachineFreeLook _thirdPersonCamera;
     public CinemachineFreeLook _focusCamera;
-   
+
+
+    //GETTERS AND SETTERS 
+    public CinemachineFreeLook ActiveCamera { get { return _activeCamera; } private set { } }
 
     ////USELESS FOR NOW
     //public bool UsingOrbitalCamera { get; private set; } = false;

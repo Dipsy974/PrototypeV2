@@ -678,8 +678,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.06433938, y: -0.000000008585366, z: 5.5352395e-10, w: 0.9979281}
-  m_LocalPosition: {x: -5.558612, y: 3.0176435, z: -3.0637069}
+  m_LocalRotation: {x: 0.09506516, y: -0.0000000042821138, z: 4.0893186e-10, w: 0.99547106}
+  m_LocalPosition: {x: -6.208612, y: 5.4176435, z: -13.063707}
   m_LocalScale: {x: 1, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2797,7 +2797,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 944341194}
-  m_LocalRotation: {x: 0.112676725, y: 0.000000017096806, z: -0.0000000019387585,
+  m_LocalRotation: {x: 0.112676725, y: -0.000000017096806, z: 0.0000000019387585,
     w: 0.9936317}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -5046,6 +5046,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _input: {fileID: 1473778227}
+  _camController: {fileID: 946726294}
   _movementSpeed: 450
   _playerIsGrounded: 1
   _groundCheckRadiusMultiplier: 0.9
@@ -6531,7 +6532,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 44
+  m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 1591261100}
   m_Follow: {fileID: 1591261100}
@@ -7869,7 +7870,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2133562834}
-  m_LocalRotation: {x: 0.095065154, y: 0.0000000042821133, z: -4.0893178e-10, w: 0.99547106}
+  m_LocalRotation: {x: 0.095065154, y: -0.0000000042821133, z: 4.0893178e-10, w: 0.99547106}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

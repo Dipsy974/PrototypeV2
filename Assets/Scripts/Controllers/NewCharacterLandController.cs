@@ -9,6 +9,7 @@ public class NewCharacterLandController : MonoBehaviour
     private Rigidbody _rb;
     private CapsuleCollider _capsuleCollider;
     private Animator _animator;
+    public CameraController _camController; 
 
 
     //Movement variables
@@ -69,9 +70,16 @@ public class NewCharacterLandController : MonoBehaviour
 
     void FixedUpdate()
     {
-
-        HandleRotation();
-        PlayerLook(); 
+        if (CheckFocusCamera())
+        {
+            PlayerLook();
+        }
+        else
+        {
+            HandleRotation();
+        }
+ 
+        
 
         HandleAnimation();
 
@@ -104,7 +112,7 @@ public class NewCharacterLandController : MonoBehaviour
 
     private void PlayerLook()
     {
-        _rb.rotation = Quaternion.Euler(0.0f, Camera.main.transform.rotation.y, 0.0f);
+        _rb.rotation = Quaternion.Euler(0.0f, Camera.main.transform.rotation.eulerAngles.y, 0.0f);
     }
 
     private void HandleAnimation()
@@ -200,8 +208,8 @@ public class NewCharacterLandController : MonoBehaviour
         return new Vector3(_input.MoveInput.x, 0.0f, _input.MoveInput.y);
     }
 
-    private void CheckFocusCamera()
+    private bool CheckFocusCamera()
     {
-       
+        return _camController.ActiveCamera == _camController._focusCamera; 
     }
 }
