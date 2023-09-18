@@ -13,6 +13,8 @@ public class CharacterControlsInput : MonoBehaviour
     
     public bool RollIsPressed { get; private set; } = false; 
     public bool JumpIsPressed { get; private set; } = false; 
+    
+    public bool AttackIsPressed { get; private set; } = false; 
 
     InputActions _input;
     
@@ -31,6 +33,9 @@ public class CharacterControlsInput : MonoBehaviour
 
         _input.CharacterControls.Jump.started += SetJump;
         _input.CharacterControls.Jump.canceled += SetJump;
+        
+        _input.CharacterControls.Attack.started += SetAttack;
+        _input.CharacterControls.Attack.canceled += SetAttack;
     }
 
     private void OnDisable()
@@ -43,6 +48,9 @@ public class CharacterControlsInput : MonoBehaviour
 
         _input.CharacterControls.Jump.performed -= SetJump;
         _input.CharacterControls.Jump.canceled -= SetJump;
+        
+        _input.CharacterControls.Attack.performed -= SetAttack;
+        _input.CharacterControls.Attack.canceled -= SetAttack;
 
         _input.CharacterControls.Disable();
     }
@@ -62,6 +70,11 @@ public class CharacterControlsInput : MonoBehaviour
     private void SetJump(InputAction.CallbackContext ctx)
     {
         JumpIsPressed = ctx.started;
+    }
+    
+    private void SetAttack(InputAction.CallbackContext ctx)
+    {
+        AttackIsPressed = ctx.started;
     }
 
     private void SetLook(InputAction.CallbackContext ctx)

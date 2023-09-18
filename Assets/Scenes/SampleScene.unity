@@ -4753,6 +4753,7 @@ GameObject:
   - component: {fileID: 1364527935}
   - component: {fileID: 1364527938}
   - component: {fileID: 1364527939}
+  - component: {fileID: 1364527940}
   m_Layer: 0
   m_Name: CharacterController
   m_TagString: Untagged
@@ -4880,6 +4881,20 @@ MonoBehaviour:
   _rollSpeed: 5000
   _rollCooldown: 1
   _rollTime: 1
+--- !u!114 &1364527940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364527932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49448699c65cd7418236f088d549809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterController: {fileID: 1364527938}
+  _input: {fileID: 1473778227}
 --- !u!1 &1383080297
 GameObject:
   m_ObjectHideFlags: 0
