@@ -76,8 +76,11 @@ public class NewCharacterLandController : MonoBehaviour
         }
         else
         {
+            AdjustFocusCamera(); 
             HandleRotation();
         }
+
+   
  
         
 
@@ -210,6 +213,18 @@ public class NewCharacterLandController : MonoBehaviour
 
     private bool CheckFocusCamera()
     {
-        return _camController.ActiveCamera == _camController._focusCamera; 
+        return _camController.ActiveCamera == _camController._focusCamera;  //&& !_camController.IsLiveBlend; 
+    }
+
+    //Function to adjust focus camera behind player during 3rd person camera
+    private void AdjustFocusCamera()
+    {
+        Vector3 positionToLookAt;
+
+        positionToLookAt.x = transform.rotation.x;
+        positionToLookAt.y = 0f;
+        positionToLookAt.z = transform.rotation.z;
+
+        _camController._focusCamera.transform.rotation = Quaternion.Euler(positionToLookAt);
     }
 }
