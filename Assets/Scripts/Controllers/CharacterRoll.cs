@@ -12,29 +12,33 @@ public class CharacterRoll : MonoBehaviour
     
     [Header("Roll Variables")]
     private bool _isRollPressed, _isRolling, _rollDone, _canRoll;
-    [SerializeField] private float _rollForce, _rollDistance, _rollCooldown;
-    private float _rollTime;
+    [SerializeField] private float _rollSpeed, _rollDistance, _rollCooldown;
+    [SerializeField] private float _rollTime;
     private Vector3 _rollDirection;
+
 
     private void Awake()
     {
         _canRoll = true;
+        //_rollTime = _rollDistance / _rollSpeed;
     }
 
     private void Update()
     {
         if (_input.RollIsPressed && _canRoll)
         {
-            Debug.Log("roll");
-            Roll();
+            StartCoroutine(Roll());
         }
     }
 
-    private void Roll()
+    private IEnumerator Roll()
     {
-
-        _characterController.RB.AddForce(_characterController.transform.forward * _rollForce, ForceMode.Impulse);
-        
+        StartCoroutine(EndRoll());
+        while (_isRolling)
+        {
+            _characterController.RB.AddForce(_characterController.transform.forward * _rollSpeed, ForceMode.Force);
+            yield return new WaitForEndOfFrame();
+        }
     }
     
     private IEnumerator TriggerRollCooldown()
@@ -43,5 +47,13 @@ public class CharacterRoll : MonoBehaviour
         yield return new WaitForSeconds(_rollCooldown);
         yield return new WaitUntil(()=> !_input.RollIsPressed);
         _canRoll = true;
+    }
+
+    private IEnumerator EndRoll()
+    {
+        _isRolling = true;
+        yield return new WaitForSeconds(_rollTime);
+        _isRolling = false;
+        StartCoroutine(TriggerRollCooldown());
     }
 }
