@@ -14,6 +14,8 @@ public class CharacterControlsInput : MonoBehaviour
     public bool RollIsPressed { get; private set; } = false; 
 
     InputActions _input;
+    
+    public InputActions PlayerInput { get { return _input; } }
 
     private void OnEnable()
     {

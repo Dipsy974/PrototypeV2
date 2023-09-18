@@ -12,15 +12,19 @@ public class CharacterRoll : MonoBehaviour
     
     [Header("Roll Variables")]
     private bool _isRollPressed, _isRolling, _rollDone, _canRoll;
-    [SerializeField] private float _rollSpeed, _rollDistance, _rollCooldown;
+    [SerializeField] private float _rollSpeed, _rollCooldown;
     [SerializeField] private float _rollTime;
     private Vector3 _rollDirection;
+
+    private int _isRollingHash;
 
 
     private void Awake()
     {
+        _isRollingHash = Animator.StringToHash("isRolling");
         _canRoll = true;
-        //_rollTime = _rollDistance / _rollSpeed;
+        float rollPlayrate = (_characterController.Animator.runtimeAnimatorController.animationClips[2].length/_rollTime); 
+        _characterController.Animator.SetFloat("RollPlayrate", rollPlayrate);
     }
 
     private void Update()
@@ -43,7 +47,6 @@ public class CharacterRoll : MonoBehaviour
     
     private IEnumerator TriggerRollCooldown()
     {
-        _canRoll = false;
         yield return new WaitForSeconds(_rollCooldown);
         yield return new WaitUntil(()=> !_input.RollIsPressed);
         _canRoll = true;
@@ -51,9 +54,12 @@ public class CharacterRoll : MonoBehaviour
 
     private IEnumerator EndRoll()
     {
+        _characterController.Animator.SetBool(_isRollingHash, true);
+        _canRoll = false;
         _isRolling = true;
         yield return new WaitForSeconds(_rollTime);
         _isRolling = false;
+        _characterController.Animator.SetBool(_isRollingHash, false);
         StartCoroutine(TriggerRollCooldown());
     }
 }
