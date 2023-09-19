@@ -20,6 +20,7 @@ public class NewCharacterLandController : MonoBehaviour
 
     private bool _isRolling = false; 
     private bool _isAttacking = false; 
+    private bool _isHanging = false;
 
 
     [Header("Ground Check")]
@@ -47,12 +48,14 @@ public class NewCharacterLandController : MonoBehaviour
     [SerializeField] float _jumpBufferTime = 0.2f;
     [SerializeField] float _jumpBufferTimeCounter = 0.0f;
     [SerializeField] bool _playerIsJumping = false;
-    [SerializeField] bool _jumpWasPressedLastFrame = false; 
+    [SerializeField] bool _jumpWasPressedLastFrame = false;
+    private bool _isFalling;
     
 
 
     private int _isRunningHash;
     private int _isJumpingHash;
+    private int _isFallingHash;
    
 
     private float _rotationFactorPerFrame = 15.0f;
@@ -65,6 +68,9 @@ public class NewCharacterLandController : MonoBehaviour
     public bool PlayerIsGrounded { get { return _playerIsGrounded; } private set { } }
     public bool IsRolling { get { return _isRolling; }  set { _isRolling = value; } }
     public bool IsAttacking { get { return _isAttacking; }  set { _isAttacking = value; } }
+    public bool IsHanging { get { return _isHanging; }  set { _isHanging = value; } }
+    public bool IsFalling { get { return _isFalling; }  private set { }}
+
 
 
 
@@ -80,6 +86,7 @@ public class NewCharacterLandController : MonoBehaviour
 
         _isRunningHash = Animator.StringToHash("isRunning");
         _isJumpingHash = Animator.StringToHash("isJumping");
+        _isFallingHash = Animator.StringToHash("isFalling");
 
         //LOGIQUE POUR CACHER LE CURSEUR, A PLACER AILLEURS
         Cursor.lockState = CursorLockMode.Locked;
@@ -96,16 +103,17 @@ public class NewCharacterLandController : MonoBehaviour
         }
         else
         {
-            if (!_isRolling)
+            if (!_isRolling && !_isHanging)
             {
                 HandleRotation();
             }
         }
 
    
- 
+        //Check isFalling
+        _isFalling = _rb.velocity.y < 0 && !_playerIsGrounded;
+        if (_isFalling) _playerIsJumping = false;
         
-
         HandleAnimation();
 
         //MOVEMENT
@@ -118,8 +126,7 @@ public class NewCharacterLandController : MonoBehaviour
         _appliedMovement = PlayerMove();
         _cameraRelativeMovement = ConvertToCameraSpace(_appliedMovement);
 
-        Debug.Log(_isAttacking); 
-        if (!_isRolling && !_isAttacking)
+        if (!_isRolling && !_isAttacking && !_isHanging)
         {
             _rb.AddForce(_cameraRelativeMovement, ForceMode.Force);
         }
@@ -162,11 +169,21 @@ public class NewCharacterLandController : MonoBehaviour
         //Jumping handling
         if (_playerIsJumping)
         {
+            Debug.Log("jump");
             _animator.SetBool(_isJumpingHash, true);
         }
         else if (!_playerIsJumping || _playerIsGrounded)
         {
             _animator.SetBool(_isJumpingHash, false);
+        }
+        
+        if (!_playerIsJumping && !_playerIsGrounded)
+        {
+            _animator.SetBool(_isFallingHash, true);
+        }
+        else if (!_isFalling)
+        {
+            _animator.SetBool(_isFallingHash, false);
         }
 
     }
@@ -198,7 +215,7 @@ public class NewCharacterLandController : MonoBehaviour
 
     private float PlayerGravity()
     {
-        if (_playerIsGrounded)
+        if (_playerIsGrounded || _isHanging)
         {
             _gravity = 0.0f;
             _gravityFallCurrent = _gravityFallMin;
