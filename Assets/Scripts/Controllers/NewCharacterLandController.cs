@@ -19,6 +19,7 @@ public class NewCharacterLandController : MonoBehaviour
     [SerializeField] private float _movementSpeed;
 
     private bool _isRolling = false; 
+    private bool _isAttacking = false; 
 
 
     [Header("Ground Check")]
@@ -63,6 +64,7 @@ public class NewCharacterLandController : MonoBehaviour
     public Vector3 PlayerMoveInput { get { return _playerMoveInput; } private set { } }
     public bool PlayerIsGrounded { get { return _playerIsGrounded; } private set { } }
     public bool IsRolling { get { return _isRolling; }  set { _isRolling = value; } }
+    public bool IsAttacking { get { return _isAttacking; }  set { _isAttacking = value; } }
 
 
 
@@ -116,7 +118,8 @@ public class NewCharacterLandController : MonoBehaviour
         _appliedMovement = PlayerMove();
         _cameraRelativeMovement = ConvertToCameraSpace(_appliedMovement);
 
-        if (!_isRolling)
+        Debug.Log(_isAttacking); 
+        if (!_isRolling && !_isAttacking)
         {
             _rb.AddForce(_cameraRelativeMovement, ForceMode.Force);
         }

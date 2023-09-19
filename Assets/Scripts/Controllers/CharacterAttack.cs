@@ -45,6 +45,7 @@ public class CharacterAttack : MonoBehaviour
 
             _characterController.Animator.SetBool(_isAttackingHash, true);
             _isAttacking = true;
+            _characterController.IsAttacking = true; // Used in Character controller to prevent player from moving
             _attackCount++;
             _characterController.Animator.SetInteger(_attackCountHash, _attackCount);
         }
@@ -53,7 +54,6 @@ public class CharacterAttack : MonoBehaviour
     
     private void EndAttack()  //Called in events in each attack animation settings
     {
-        _characterController.Animator.SetBool(_isAttackingHash, false);
         _isAttacking = false;
         _currentAttackResetRoutine = StartCoroutine(attackResetRoutine());  //Set a coroutine to reset attack count after a delay at the end of an attack
         if (_attackCount >= 3) //Combo finished
@@ -61,6 +61,9 @@ public class CharacterAttack : MonoBehaviour
             _isComboFinished = true; //Set combo finished to true : player can't attack anymore until the attackResetRoutine set it to false
             _attackCount = 0;
             _characterController.Animator.SetInteger(_attackCountHash, _attackCount);
+
+            _characterController.Animator.SetBool(_isAttackingHash, false); //Stop attack animation when combo is over
+            _characterController.IsAttacking = false; //Only able player to move if attack animation is finished
         }
     }
 
@@ -70,5 +73,9 @@ public class CharacterAttack : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         _attackCount = 0;
         _isComboFinished = false;
+
+        _characterController.Animator.SetBool(_isAttackingHash, false); // Only stop attack animation if attack count is reset
+        _characterController.IsAttacking = false; //Only able player to move if attack animation is finished
+
     }
 }
