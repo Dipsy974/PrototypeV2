@@ -4,7 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< HEAD
   - Paint
+=======
+  - Ground
+>>>>>>> main
   layers:
   - Default
   - TransparentFX
