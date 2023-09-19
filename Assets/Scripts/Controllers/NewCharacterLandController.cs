@@ -118,7 +118,6 @@ public class NewCharacterLandController : MonoBehaviour
         _appliedMovement = PlayerMove();
         _cameraRelativeMovement = ConvertToCameraSpace(_appliedMovement);
 
-        Debug.Log(_isAttacking); 
         if (!_isRolling && !_isAttacking)
         {
             _rb.AddForce(_cameraRelativeMovement, ForceMode.Force);

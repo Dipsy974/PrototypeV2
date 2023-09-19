@@ -9,6 +9,7 @@ public class CharacterAttack : MonoBehaviour
     [Header("References")]
     [SerializeField]
     private NewCharacterLandController _characterController;
+
     [SerializeField] private CharacterControlsInput _input;
     
     //private variables
