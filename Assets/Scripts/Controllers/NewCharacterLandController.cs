@@ -70,6 +70,7 @@ public class NewCharacterLandController : MonoBehaviour
     public bool IsAttacking { get { return _isAttacking; }  set { _isAttacking = value; } }
     public bool IsHanging { get { return _isHanging; }  set { _isHanging = value; } }
     public bool IsFalling { get { return _isFalling; }  private set { }}
+    public bool IsJumping { get { return _playerIsJumping; }  set { _playerIsJumping = value; }}
 
 
 
@@ -221,7 +222,7 @@ public class NewCharacterLandController : MonoBehaviour
             _gravityFallCurrent = _gravityFallMin;
         }
         else
-        {
+        { 
             _playerFallTimer -= Time.fixedDeltaTime;
             if (_playerFallTimer < 0.0f)
             {

@@ -71,14 +71,15 @@ public class LedgeGrab : MonoBehaviour
         _isHanging = true;
         _characterController.Animator.SetBool(_isHangingHash, true);
         _characterController.IsHanging = true;
-        Transform playerTransform = transform;
+        _characterController.IsJumping = false;
+
         Vector3 hangPosition = _positionToGrab;
-        Vector3 offset = playerTransform.forward * 0f + playerTransform.up * 0f; //offset adjusted to character dimensions
+        Vector3 offset = transform.forward * 0f + transform.up * 0f; //offset adjusted to character dimensions
         hangPosition += offset;
-        playerTransform.position = hangPosition;
-        Debug.Log(playerTransform.position);
-        Debug.Log(hangPosition);
-        playerTransform.forward = _directionToFace;
+        transform.position = hangPosition;
+        Debug.Log("Pos to hang : " + transform.position);
+        //_characterController.RB.velocity.y = 0;
+        transform.forward = _directionToFace;
     }
     
     private IEnumerator TriggerLedgeGrabCooldown()
