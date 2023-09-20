@@ -140,8 +140,6 @@ public class LedgeGrab : MonoBehaviour
         _playerNewPosition = _positionToGrab + transform.up * 0f + transform.forward * 1f;
         _characterController.RB.position = _playerNewPosition;
         ExitHang();
-
-
     }
     
     
