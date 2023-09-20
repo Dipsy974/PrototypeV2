@@ -16,6 +16,8 @@ public class CharacterControlsInput : MonoBehaviour
     public bool PaintIsPressed { get; private set; } = false; 
     
     public bool AttackIsPressed { get; private set; } = false; 
+    
+    public bool DownLedgeIsPressed { get; private set; } = false; 
 
     InputActions _input;
     
@@ -40,6 +42,10 @@ public class CharacterControlsInput : MonoBehaviour
 
         _input.CharacterControls.Paint.started += SetPaint;
         _input.CharacterControls.Paint.canceled += SetPaint;
+        
+        _input.CharacterControls.DownLedge.started += SetDownLedge;
+        _input.CharacterControls.DownLedge.performed += SetDownLedge;
+        _input.CharacterControls.DownLedge.canceled += SetDownLedge;
     }
 
     private void OnDisable()
@@ -58,6 +64,10 @@ public class CharacterControlsInput : MonoBehaviour
 
         _input.CharacterControls.Paint.started -= SetPaint;
         _input.CharacterControls.Paint.canceled -= SetPaint;
+        
+        _input.CharacterControls.DownLedge.started -= SetDownLedge;
+        _input.CharacterControls.DownLedge.performed -= SetDownLedge;
+        _input.CharacterControls.DownLedge.canceled -= SetDownLedge;
 
         _input.CharacterControls.Disable();
     }
@@ -92,5 +102,10 @@ public class CharacterControlsInput : MonoBehaviour
     private void SetLook(InputAction.CallbackContext ctx)
     {
         LookInput = ctx.ReadValue<Vector2>();
+    }
+    
+    private void SetDownLedge(InputAction.CallbackContext ctx)
+    {
+        DownLedgeIsPressed = ctx.ReadValueAsButton();
     }
 }

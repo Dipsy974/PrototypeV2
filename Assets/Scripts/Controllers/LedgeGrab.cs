@@ -10,6 +10,10 @@ public class LedgeGrab : MonoBehaviour
     private NewCharacterLandController _characterController;
     [SerializeField] private CharacterControlsInput _input;
     
+    
+    [SerializeField]
+    private float _forwardOffset, _upwardOffset;
+    
     //variables
     private bool _isHanging, _isDownLedgePressed, _canGrabLedge;
     private Vector3 _positionToGrab, _directionToFace;
@@ -24,9 +28,14 @@ public class LedgeGrab : MonoBehaviour
 
     private void Update()
     {
-        if (_characterController.IsFalling)
+        if (_characterController.IsFalling && _canGrabLedge)
         {
             CheckLedgeGrab();
+        }
+
+        if (_isHanging && _input.DownLedgeIsPressed)
+        {
+            ExitHang();
         }
     }
 
@@ -53,7 +62,7 @@ public class LedgeGrab : MonoBehaviour
             Physics.Linecast(lineFwdStart, lineFwdEnd, out fwdHit, LayerMask.GetMask("Walls"));
             Debug.DrawLine(lineFwdStart,lineFwdEnd);
             
-            if (fwdHit.collider != null && _canGrabLedge)
+            if (fwdHit.collider != null)
             {
                 _positionToGrab = new Vector3(fwdHit.point.x, downHit.point.y, fwdHit.point.z);
                 _directionToFace = -fwdHit.normal;
@@ -68,17 +77,19 @@ public class LedgeGrab : MonoBehaviour
     {
         _canGrabLedge = false;
         _characterController.CapCollider.enabled = false;
+        _characterController.RB.isKinematic = true;
         _isHanging = true;
         _characterController.Animator.SetBool(_isHangingHash, true);
         _characterController.IsHanging = true;
         _characterController.IsJumping = false;
+        _characterController.IsFalling = false;
 
         Vector3 hangPosition = _positionToGrab;
-        Vector3 offset = transform.forward * 0f + transform.up * 0f; //offset adjusted to character dimensions
+        Vector3 offset = transform.forward * _forwardOffset + transform.up * _upwardOffset; //offset adjusted to character dimensions
         hangPosition += offset;
         transform.position = hangPosition;
         Debug.Log("Pos to hang : " + transform.position);
-        //_characterController.RB.velocity.y = 0;
+
         transform.forward = _directionToFace;
     }
     
@@ -87,5 +98,16 @@ public class LedgeGrab : MonoBehaviour
         _canGrabLedge = false;
         yield return new WaitForSeconds(0.2f);
         _canGrabLedge = true;
+    }
+
+    private void ExitHang()
+    {
+        Debug.Log("exit");
+        _characterController.CapCollider.enabled = true;
+        _characterController.RB.isKinematic = false;
+        _isHanging = false;
+        _characterController.Animator.SetBool(_isHangingHash, false);
+        _characterController.IsHanging = false;
+        StartCoroutine(TriggerLedgeGrabCooldown());
     }
 }
