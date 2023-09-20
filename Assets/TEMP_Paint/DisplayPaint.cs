@@ -10,6 +10,9 @@ public class DisplayPaint : MonoBehaviour
     [SerializeField] GameObject effectCollider;
     List<ParticleCollisionEvent> collisionEvents;
 
+    [SerializeField] private int particlesHitLimit = 5;
+    private int particlesHitCounter; 
+
     private void Start()
     {
         collisionEvents = new List<ParticleCollisionEvent>(); 
@@ -18,7 +21,14 @@ public class DisplayPaint : MonoBehaviour
     {
 
         ParticlePhysicsExtensions.GetCollisionEvents(other.GetComponent<ParticleSystem>(), gameObject, collisionEvents);
-        PaintOn(collisionEvents[0]);
+        particlesHitCounter++; 
+
+        if(particlesHitCounter >= 5)
+        {
+            particlesHitCounter = 0; 
+            PaintOn(collisionEvents[0]);
+        }
+
     }
    
 

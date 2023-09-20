@@ -169,7 +169,6 @@ public class NewCharacterLandController : MonoBehaviour
         //Jumping handling
         if (_playerIsJumping)
         {
-            Debug.Log("jump");
             _animator.SetBool(_isJumpingHash, true);
         }
         else if (!_playerIsJumping || _playerIsGrounded)

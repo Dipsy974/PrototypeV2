@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: a5ec8a48f31583348bf0dd200f7ab89d, type: 2}
+  m_Material: {fileID: 2100000, guid: 0d3e2a891a8e37546bdc358e876ca13c, type: 2}
   m_DrawDistance: 1000
   m_FadeScale: 0.9
   m_StartAngleFade: 180
@@ -53,5 +53,5 @@ MonoBehaviour:
   m_UVBias: {x: 0, y: 0}
   m_ScaleMode: 0
   m_Offset: {x: 0, y: 0, z: 0}
-  m_Size: {x: 1, y: 1, z: 0.09}
+  m_Size: {x: 3, y: 3, z: 0.09}
   m_FadeFactor: 1

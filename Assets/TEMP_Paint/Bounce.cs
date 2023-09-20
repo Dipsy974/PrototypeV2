@@ -16,13 +16,13 @@ public class Bounce : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Bounce"); 
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other); 
+        if (other.GetComponent<NewCharacterLandController>() != null)
+        {
+            NewCharacterLandController player = other.GetComponent<NewCharacterLandController>();
+            player.RB.AddForce(new Vector3(0.0f, 1000.0f, 0.0f), ForceMode.Impulse);
+
+        }
     }
 }
