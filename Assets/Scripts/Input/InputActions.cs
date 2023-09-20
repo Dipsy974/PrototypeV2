@@ -98,6 +98,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UpLedge"",
+                    ""type"": ""Button"",
+                    ""id"": ""aeb25d64-bfd2-417d-910e-844b7546d759"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -318,6 +327,50 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""DownLedge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6fc3a456-558c-47ff-99fa-094319222845"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""UpLedge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c30a257-e64a-4c9c-b136-7f9aeeadf298"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""UpLedge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""461e2bba-a5f1-42b5-b5e0-da754d30d654"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""UpLedge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""192717c2-cb4b-47b1-a51f-ba8c62023095"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpLedge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -933,6 +986,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_CharacterControls_Attack = m_CharacterControls.FindAction("Attack", throwIfNotFound: true);
         m_CharacterControls_Paint = m_CharacterControls.FindAction("Paint", throwIfNotFound: true);
         m_CharacterControls_DownLedge = m_CharacterControls.FindAction("DownLedge", throwIfNotFound: true);
+        m_CharacterControls_UpLedge = m_CharacterControls.FindAction("UpLedge", throwIfNotFound: true);
         // UIControls
         m_UIControls = asset.FindActionMap("UIControls", throwIfNotFound: true);
         m_UIControls_Navigate = m_UIControls.FindAction("Navigate", throwIfNotFound: true);
@@ -1013,6 +1067,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Attack;
     private readonly InputAction m_CharacterControls_Paint;
     private readonly InputAction m_CharacterControls_DownLedge;
+    private readonly InputAction m_CharacterControls_UpLedge;
     public struct CharacterControlsActions
     {
         private @InputActions m_Wrapper;
@@ -1025,6 +1080,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         public InputAction @Attack => m_Wrapper.m_CharacterControls_Attack;
         public InputAction @Paint => m_Wrapper.m_CharacterControls_Paint;
         public InputAction @DownLedge => m_Wrapper.m_CharacterControls_DownLedge;
+        public InputAction @UpLedge => m_Wrapper.m_CharacterControls_UpLedge;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1058,6 +1114,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @DownLedge.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnDownLedge;
                 @DownLedge.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnDownLedge;
                 @DownLedge.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnDownLedge;
+                @UpLedge.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnUpLedge;
+                @UpLedge.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnUpLedge;
+                @UpLedge.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnUpLedge;
             }
             m_Wrapper.m_CharacterControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -1086,6 +1145,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @DownLedge.started += instance.OnDownLedge;
                 @DownLedge.performed += instance.OnDownLedge;
                 @DownLedge.canceled += instance.OnDownLedge;
+                @UpLedge.started += instance.OnUpLedge;
+                @UpLedge.performed += instance.OnUpLedge;
+                @UpLedge.canceled += instance.OnUpLedge;
             }
         }
     }
@@ -1231,6 +1293,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnAttack(InputAction.CallbackContext context);
         void OnPaint(InputAction.CallbackContext context);
         void OnDownLedge(InputAction.CallbackContext context);
+        void OnUpLedge(InputAction.CallbackContext context);
     }
     public interface IUIControlsActions
     {
