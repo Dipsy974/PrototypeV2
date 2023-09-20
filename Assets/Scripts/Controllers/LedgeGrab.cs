@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using FixedUpdate = UnityEngine.PlayerLoop.FixedUpdate;
 
 public class LedgeGrab : MonoBehaviour
 {
@@ -15,16 +17,17 @@ public class LedgeGrab : MonoBehaviour
     private float _forwardOffset, _upwardOffset;
     
     //variables
-    private bool _isHanging, _isDownLedgePressed, _canGrabLedge, _isLedgeClimbing;
-    private Vector3 _positionToGrab, _directionToFace;
+    private bool _isHanging, _isDownLedgePressed, _canGrabLedge, _isLedgeClimbing, _canClimbLedge, _rbMoving;
+    private Vector3 _positionToGrab, _directionToFace, _playerNewPosition, _playerStartPosition;
     
     private int _isHangingHash;
     private int _isLedgeClimbingHash;
+    [SerializeField]private float _delta;
 
     private void Awake()
     {
         _isHangingHash = Animator.StringToHash("isHanging");
-        _isLedgeClimbingHash = Animator.StringToHash("isLedgeClimbingHash");
+        _isLedgeClimbingHash = Animator.StringToHash("isLedgeClimbing");
         _canGrabLedge = true;
     }
 
@@ -43,14 +46,17 @@ public class LedgeGrab : MonoBehaviour
         {
             _characterController.Animator.SetBool(_isLedgeClimbingHash, true);
             _isLedgeClimbing = true;
-            ExitHang();
         }
+    }
+
+    private void FixedUpdate()
+    {
+
     }
 
 
     private void CheckLedgeGrab()
     {
-        Debug.Log("check ledge");
         
         Transform playerTransform = transform;
         
@@ -97,6 +103,8 @@ public class LedgeGrab : MonoBehaviour
         hangPosition += offset;
         transform.position = hangPosition;
         transform.forward = _directionToFace;
+
+        StartCoroutine(TriggerLedgeClimbCooldown());
     }
     
     private IEnumerator TriggerLedgeGrabCooldown()
@@ -104,6 +112,13 @@ public class LedgeGrab : MonoBehaviour
         _canGrabLedge = false;
         yield return new WaitForSeconds(0.8f);
         _canGrabLedge = true;
+    }
+    
+    private IEnumerator TriggerLedgeClimbCooldown()
+    {
+        _canClimbLedge = false;
+        yield return new WaitForSeconds(0.2f);
+        _canClimbLedge = true;
     }
 
     private void ExitHang()
@@ -116,9 +131,18 @@ public class LedgeGrab : MonoBehaviour
         StartCoroutine(TriggerLedgeGrabCooldown());
     }
 
-    private void EndLedgeClimb()
+    private void EndLedgeClimb()  //Triggered at end of climb anim
     {
         _isLedgeClimbing = false;
         _characterController.Animator.SetBool(_isLedgeClimbingHash, false);
+        
+        //Reposition player
+        _playerNewPosition = _positionToGrab + transform.up * 0f + transform.forward * 1f;
+        _characterController.RB.position = _playerNewPosition;
+        ExitHang();
+
+
     }
+    
+    
 }
