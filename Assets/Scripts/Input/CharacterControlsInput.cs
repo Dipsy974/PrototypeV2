@@ -18,6 +18,8 @@ public class CharacterControlsInput : MonoBehaviour
     public bool AttackIsPressed { get; private set; } = false; 
     
     public bool DownLedgeIsPressed { get; private set; } = false; 
+    
+    public bool UpLedgeIsPressed { get; private set; } = false; 
 
     InputActions _input;
     
@@ -46,6 +48,10 @@ public class CharacterControlsInput : MonoBehaviour
         _input.CharacterControls.DownLedge.started += SetDownLedge;
         _input.CharacterControls.DownLedge.performed += SetDownLedge;
         _input.CharacterControls.DownLedge.canceled += SetDownLedge;
+        
+        _input.CharacterControls.UpLedge.started += SetUpLedge;
+        _input.CharacterControls.UpLedge.performed += SetUpLedge;
+        _input.CharacterControls.UpLedge.canceled += SetUpLedge;
     }
 
     private void OnDisable()
@@ -107,5 +113,10 @@ public class CharacterControlsInput : MonoBehaviour
     private void SetDownLedge(InputAction.CallbackContext ctx)
     {
         DownLedgeIsPressed = ctx.ReadValueAsButton();
+    }
+    
+    private void SetUpLedge(InputAction.CallbackContext ctx)
+    {
+        UpLedgeIsPressed = ctx.ReadValueAsButton();
     }
 }

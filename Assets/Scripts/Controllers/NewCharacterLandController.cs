@@ -50,6 +50,7 @@ public class NewCharacterLandController : MonoBehaviour
     [SerializeField] bool _playerIsJumping = false;
     [SerializeField] bool _jumpWasPressedLastFrame = false;
     private bool _isFalling;
+
     
 
 

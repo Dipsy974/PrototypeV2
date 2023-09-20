@@ -15,14 +15,16 @@ public class LedgeGrab : MonoBehaviour
     private float _forwardOffset, _upwardOffset;
     
     //variables
-    private bool _isHanging, _isDownLedgePressed, _canGrabLedge;
+    private bool _isHanging, _isDownLedgePressed, _canGrabLedge, _isLedgeClimbing;
     private Vector3 _positionToGrab, _directionToFace;
     
     private int _isHangingHash;
+    private int _isLedgeClimbingHash;
 
     private void Awake()
     {
         _isHangingHash = Animator.StringToHash("isHanging");
+        _isLedgeClimbingHash = Animator.StringToHash("isLedgeClimbingHash");
         _canGrabLedge = true;
     }
 
@@ -33,8 +35,14 @@ public class LedgeGrab : MonoBehaviour
             CheckLedgeGrab();
         }
 
-        if (_isHanging && _input.DownLedgeIsPressed)
+        if (_isHanging && _input.DownLedgeIsPressed )
         {
+            ExitHang();
+        }
+        else if (_isHanging && _input.UpLedgeIsPressed)
+        {
+            _characterController.Animator.SetBool(_isLedgeClimbingHash, true);
+            _isLedgeClimbing = true;
             ExitHang();
         }
     }
@@ -87,26 +95,29 @@ public class LedgeGrab : MonoBehaviour
         Vector3 offset = transform.forward * _forwardOffset + transform.up * _upwardOffset; //offset adjusted to character dimensions
         hangPosition += offset;
         transform.position = hangPosition;
-        Debug.Log("Pos to hang : " + transform.position);
-
         transform.forward = _directionToFace;
     }
     
     private IEnumerator TriggerLedgeGrabCooldown()
     {
         _canGrabLedge = false;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.8f);
         _canGrabLedge = true;
     }
 
     private void ExitHang()
     {
-        Debug.Log("exit");
         _characterController.CapCollider.enabled = true;
         _characterController.RB.isKinematic = false;
         _isHanging = false;
         _characterController.Animator.SetBool(_isHangingHash, false);
         _characterController.IsHanging = false;
         StartCoroutine(TriggerLedgeGrabCooldown());
+    }
+
+    private void EndLedgeClimb()
+    {
+        _isLedgeClimbing = false;
+        _characterController.Animator.SetBool(_isLedgeClimbingHash, false);
     }
 }
