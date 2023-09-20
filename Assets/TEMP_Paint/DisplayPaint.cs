@@ -46,4 +46,9 @@ public class DisplayPaint : MonoBehaviour
         effectCollider = effect; 
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+    }
+
 }

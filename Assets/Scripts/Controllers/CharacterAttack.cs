@@ -38,7 +38,6 @@ public class CharacterAttack : MonoBehaviour
     { 
         if (!_isAttacking && _input.AttackIsPressed && !_isComboFinished) //Attack only if _isComboFinished correctly reset
         {
-            Debug.Log("attack");
             if (_attackCount < 3 && _currentAttackResetRoutine != null)
             {
                 StopCoroutine(_currentAttackResetRoutine); //Stop the coroutine only if combo is not finished

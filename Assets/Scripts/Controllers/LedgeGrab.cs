@@ -42,7 +42,6 @@ public class LedgeGrab : MonoBehaviour
 
     private void CheckLedgeGrab()
     {
-        Debug.Log("check ledge");
         
         Transform playerTransform = transform;
         
