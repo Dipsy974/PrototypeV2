@@ -843,7 +843,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1936551833}
         m_TargetAssemblyTypeName: SelectionWheel, Assembly-CSharp
         m_MethodName: UnlockNewAbility
         m_Mode: 3
@@ -1518,7 +1518,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1936551833}
         m_TargetAssemblyTypeName: SelectionWheel, Assembly-CSharp
         m_MethodName: UnlockNewAbility
         m_Mode: 3

@@ -796,7 +796,7 @@ MonoBehaviour:
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
-    m_Time: 0.5
+    m_Time: 1
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -1106,7 +1106,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh93366
+  m_Name: pb_Mesh29020
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1588,7 +1588,6 @@ MonoBehaviour:
     type: 3}
   effectCollider: {fileID: 3728490442998011394, guid: 827f1e22d58e3874da7c609b1ef78fd9,
     type: 3}
-  particlesHitLimit: 5
 --- !u!1 &514455018
 GameObject:
   m_ObjectHideFlags: 3
@@ -2027,7 +2026,7 @@ PrefabInstance:
     - target: {fileID: 6285025293089562771, guid: 3e62ee2aecc480d4b9fb9ffa15e4b9d2,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.08
+      value: -0.433
       objectReference: {fileID: 0}
     - target: {fileID: 6285025293089562771, guid: 3e62ee2aecc480d4b9fb9ffa15e4b9d2,
         type: 3}
@@ -2395,7 +2394,6 @@ MonoBehaviour:
     type: 3}
   effectCollider: {fileID: 3728490442998011394, guid: 827f1e22d58e3874da7c609b1ef78fd9,
     type: 3}
-  particlesHitLimit: 5
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2584,7 +2582,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh93038
+  m_Name: pb_Mesh28528
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2766,7 +2764,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 944341194}
-  m_LocalRotation: {x: 0.112676725, y: -0.000000017096806, z: 0.0000000019387585,
+  m_LocalRotation: {x: 0.112676725, y: 0.000000017096806, z: -0.0000000019387585,
     w: 0.9936317}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -2972,7 +2970,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh93178
+  m_Name: pb_Mesh28834
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3307,7 +3305,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh93090
+  m_Name: pb_Mesh28576
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4025,7 +4023,6 @@ MonoBehaviour:
     type: 3}
   effectCollider: {fileID: 3728490442998011394, guid: 827f1e22d58e3874da7c609b1ef78fd9,
     type: 3}
-  particlesHitLimit: 5
 --- !u!1 &1283573547
 GameObject:
   m_ObjectHideFlags: 0
@@ -4387,7 +4384,6 @@ MonoBehaviour:
     type: 3}
   effectCollider: {fileID: 3728490442998011394, guid: 827f1e22d58e3874da7c609b1ef78fd9,
     type: 3}
-  particlesHitLimit: 5
 --- !u!1 &1292009636
 GameObject:
   m_ObjectHideFlags: 3
@@ -5050,6 +5046,7 @@ GameObject:
   - component: {fileID: 1364527939}
   - component: {fileID: 1364527940}
   - component: {fileID: 1364527941}
+  - component: {fileID: 1364527942}
   m_Layer: 7
   m_Name: CharacterController
   m_TagString: Untagged
@@ -5207,6 +5204,22 @@ MonoBehaviour:
   _characterController: {fileID: 1364527938}
   _input: {fileID: 1473778227}
   paintSystem: {fileID: 2039539520}
+--- !u!114 &1364527942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364527932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7284f6de2613d5a4abdfe98b5387d943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterController: {fileID: 1364527938}
+  _input: {fileID: 1473778227}
+  _forwardOffset: -0.2
+  _upwardOffset: -1.6
 --- !u!1 &1383080297
 GameObject:
   m_ObjectHideFlags: 0
@@ -5675,7 +5688,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh93272
+  m_Name: pb_Mesh28750
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7362,14 +7375,13 @@ MonoBehaviour:
     type: 3}
   effectCollider: {fileID: 3728490442998011394, guid: 827f1e22d58e3874da7c609b1ef78fd9,
     type: 3}
-  particlesHitLimit: 5
 --- !u!43 &1814615749
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh93226
+  m_Name: pb_Mesh28706
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7924,7 +7936,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh93194
+  m_Name: pb_Mesh28850
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
