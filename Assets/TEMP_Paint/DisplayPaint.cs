@@ -51,13 +51,13 @@ public class DisplayPaint : MonoBehaviour
         if (collision.gameObject.GetComponent<NewCharacterLandController>() != null)
         {
 
-            Debug.Log(collision.contacts[0].normal); 
+            
             
             NewCharacterLandController player = collision.gameObject.GetComponent<NewCharacterLandController>();
             float speed = player.RB.velocity.magnitude;
             Vector3 direction = Vector3.Reflect(player.RB.velocity.normalized, collision.contacts[0].normal);
-
-            if(collision.contacts[0].normal.y == 0) //Change direction upward if collision surface is vertical
+            Debug.Log(direction);
+            if (collision.contacts[0].normal.y == 0) //Change direction upward if collision surface is vertical
             {
            
                 direction.y = Math.Abs(direction.y); 
