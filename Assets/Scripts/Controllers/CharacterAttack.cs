@@ -36,7 +36,7 @@ public class CharacterAttack : MonoBehaviour
 
     private void HandleAttack()
     { 
-        if (!_isAttacking && _input.AttackIsPressed && !_isComboFinished && !_characterController.IsCrouching) //Attack only if _isComboFinished correctly reset
+        if (!_isAttacking && _input.AttackIsPressed && !_isComboFinished && !_characterController.IsCrouching && _characterController.PlayerIsGrounded) //Attack only if _isComboFinished correctly reset
         {
             if (_attackCount < 3 && _currentAttackResetRoutine != null)
             {
