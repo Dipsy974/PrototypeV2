@@ -140,7 +140,6 @@ public class NewCharacterLandController : MonoBehaviour
    
         //Check isFalling
         _isFalling = _rb.velocity.y < 0 && !_playerIsGrounded;
-        if (_isFalling) _playerIsJumping = false;
         
         HandleAnimation();
 
@@ -212,7 +211,7 @@ public class NewCharacterLandController : MonoBehaviour
             _animator.SetBool(_isJumpingHash, false);
         }
         
-        if (!_playerIsJumping && !_playerIsGrounded)
+        if (!_playerIsJumping && !_playerIsGrounded || _isFalling)
         {
             _animator.SetBool(_isFallingHash, true);
         }

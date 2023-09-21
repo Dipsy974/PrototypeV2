@@ -473,17 +473,6 @@
                 {
                     "name": "up",
                     "id": "47e43231-87ba-4c7c-8014-152efdd266c7",
-                    "path": "<Gamepad>/leftStick/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "up",
-                    "id": "c7376888-f5e0-4b3a-87e9-43994591335e",
                     "path": "<Gamepad>/rightStick/up",
                     "interactions": "",
                     "processors": "",
@@ -495,17 +484,6 @@
                 {
                     "name": "down",
                     "id": "52578602-4eec-4cae-a03e-b4300fca84ca",
-                    "path": "<Gamepad>/leftStick/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "87e7e3df-f37b-432d-9232-71825526b8f3",
                     "path": "<Gamepad>/rightStick/down",
                     "interactions": "",
                     "processors": "",
@@ -517,17 +495,6 @@
                 {
                     "name": "left",
                     "id": "9d23d89b-af17-483b-8c9d-984cfca8a71d",
-                    "path": "<Gamepad>/leftStick/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "e5e00e28-d533-4252-ba24-383031a27fda",
                     "path": "<Gamepad>/rightStick/left",
                     "interactions": "",
                     "processors": "",
@@ -539,17 +506,6 @@
                 {
                     "name": "right",
                     "id": "fc5e41cd-bc9b-4ef9-a5ed-f35be06e9570",
-                    "path": "<Gamepad>/leftStick/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "24aa0502-2c97-4d4f-b9ff-cca39c566bf1",
                     "path": "<Gamepad>/rightStick/right",
                     "interactions": "",
                     "processors": "",
@@ -736,17 +692,6 @@
                 },
                 {
                     "name": "",
-                    "id": "f73422f6-d069-409c-8628-88d3df708d3b",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Submit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "98593469-babe-4ab7-9e19-c95578688374",
                     "path": "*/{Cancel}",
                     "interactions": "",
@@ -829,17 +774,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "Click",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9bfd6d50-1f0b-4eb3-ace9-c9f632c771c8",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
                     "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
