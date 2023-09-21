@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 public class NewCharacterLandController : MonoBehaviour
 {
     [SerializeField] private CharacterControlsInput _input;
+    [SerializeField] private CinemachineInputProvider _cinemachineInput;
     private Rigidbody _rb;
     private CapsuleCollider _capsuleCollider;
     private Animator _animator;
@@ -17,10 +19,16 @@ public class NewCharacterLandController : MonoBehaviour
     private Vector3 _appliedMovement;
     private Vector3 _cameraRelativeMovement;
     [SerializeField] private float _movementSpeed;
+    [SerializeField] private float _crouchSpeedMultiplier = 0.5f;
+    private float _speedMultiplier;
+    
 
     private bool _isRolling = false; 
     private bool _isAttacking = false; 
     private bool _isHanging = false;
+
+    private bool _canBounce = false; 
+    private bool _isBouncing = false; 
 
 
     [Header("Ground Check")]
@@ -49,14 +57,18 @@ public class NewCharacterLandController : MonoBehaviour
     [SerializeField] float _jumpBufferTimeCounter = 0.0f;
     [SerializeField] bool _playerIsJumping = false;
     [SerializeField] bool _jumpWasPressedLastFrame = false;
-    private bool _isFalling;
+    private bool _isFalling, _isCrouching;
 
-    
+    [Header("Bounce")]
+    [SerializeField] float _bounceForce = 10.0f;
+    [SerializeField] float _bounceTime = 0.3f;
+    private Vector3 _bounceDirection; 
 
 
     private int _isRunningHash;
     private int _isJumpingHash;
     private int _isFallingHash;
+    private int _isCrouchingHash;
    
 
     private float _rotationFactorPerFrame = 15.0f;
@@ -72,6 +84,11 @@ public class NewCharacterLandController : MonoBehaviour
     public bool IsHanging { get { return _isHanging; }  set { _isHanging = value; } }
     public bool IsFalling { get { return _isFalling; }  set { _isFalling = value; }}
     public bool IsJumping { get { return _playerIsJumping; }  set { _playerIsJumping = value; }}
+    public bool IsCrouching { get { return _isCrouching; }  set { _isCrouching = value; }}
+    public bool CanBounce { get { return _canBounce; }  set { _canBounce = value; }}
+    public bool IsBouncing { get { return _isBouncing; }  set { _isBouncing = value; }}
+    public float BounceForce { get { return _bounceForce; }}
+    public float BounceTime { get { return _bounceTime; }}
 
 
 
@@ -89,10 +106,15 @@ public class NewCharacterLandController : MonoBehaviour
         _isRunningHash = Animator.StringToHash("isRunning");
         _isJumpingHash = Animator.StringToHash("isJumping");
         _isFallingHash = Animator.StringToHash("isFalling");
+        _isCrouchingHash = Animator.StringToHash("isCrouching");
 
         //LOGIQUE POUR CACHER LE CURSEUR, A PLACER AILLEURS
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
+        _cinemachineInput.XYAxis.Set(_input.PlayerInput.CharacterControls.Look);
+
+        _speedMultiplier = 1f;
 
     }
 
@@ -102,9 +124,13 @@ public class NewCharacterLandController : MonoBehaviour
         if (CheckFocusCamera())
         {
             PlayerLook();
+            _isCrouching = true;
+            _speedMultiplier = _crouchSpeedMultiplier;
         }
         else
         {
+            _isCrouching = false;
+            _speedMultiplier = 1f;
             if (!_isRolling && !_isHanging)
             {
                 HandleRotation();
@@ -122,8 +148,16 @@ public class NewCharacterLandController : MonoBehaviour
         _playerMoveInput = GetMoveInput(); //Get Data from InputSystem
         _playerIsGrounded = PlayerGroundCheck();
 
-        _playerMoveInput.y = PlayerGravity();
-        _playerMoveInput.y = PlayerJump();
+        if (!_isBouncing)
+        {
+            _playerMoveInput.y = PlayerGravity();
+            _playerMoveInput.y = PlayerJump();
+        }
+        else
+        {
+            PlayerBounce(_bounceDirection);
+        }
+        
 
         _appliedMovement = PlayerMove();
         _cameraRelativeMovement = ConvertToCameraSpace(_appliedMovement);
@@ -140,9 +174,9 @@ public class NewCharacterLandController : MonoBehaviour
 
     private Vector3 PlayerMove()
     {
-        Vector3 calculatedPlayerMovement = (new Vector3(_playerMoveInput.x * _movementSpeed *_rb.mass,
+        Vector3 calculatedPlayerMovement = (new Vector3(_playerMoveInput.x * _movementSpeed *_rb.mass * _speedMultiplier,
                                         _playerMoveInput.y * _rb.mass,
-                                        _playerMoveInput.z * _movementSpeed * _rb.mass));
+                                        _playerMoveInput.z * _movementSpeed * _rb.mass * _speedMultiplier));
 
        
 
@@ -185,6 +219,17 @@ public class NewCharacterLandController : MonoBehaviour
         else if (!_isFalling)
         {
             _animator.SetBool(_isFallingHash, false);
+        }
+        
+        //crouch
+
+        if (_isCrouching)
+        {
+            _animator.SetBool(_isCrouchingHash, true);
+        }
+        else
+        {
+            _animator.SetBool(_isCrouchingHash, false);
         }
 
     }
@@ -275,7 +320,7 @@ public class NewCharacterLandController : MonoBehaviour
         SetCoyoteTimeCounter();
         SetJumpBufferTimeCounter();
 
-        if(_jumpBufferTimeCounter > 0.0f && !_playerIsJumping && _coyoteTimeCounter > 0.0f)
+        if(_jumpBufferTimeCounter > 0.0f && !_playerIsJumping && _coyoteTimeCounter > 0.0f && !_isCrouching)
         {
             calculatedJumpInput = _initialJumpForce;
             _playerIsJumping = true;
@@ -292,8 +337,18 @@ public class NewCharacterLandController : MonoBehaviour
             _playerIsJumping = false;
         }
 
-
         return calculatedJumpInput; 
+    }
+
+    public void PlayerBounce(Vector3 direction)
+    {
+        _rb.AddForce(direction * _bounceForce, ForceMode.Impulse); 
+        //_rb.velocity = direction * _bounceForce; 
+    }
+
+    public void SetBounceDirection(Vector3 direction)
+    {
+         _bounceDirection = direction; 
     }
 
     private void SetJumpTimeCounter()
@@ -338,5 +393,11 @@ public class NewCharacterLandController : MonoBehaviour
         return _camController.ActiveCamera == _camController._focusCamera;  //&& !_camController.IsLiveBlend; 
     }
 
-   
+    public IEnumerator CancelBounce()
+    {
+        yield return new WaitForSeconds(_bounceTime);
+        _isBouncing = false;
+    }
+
+
 }

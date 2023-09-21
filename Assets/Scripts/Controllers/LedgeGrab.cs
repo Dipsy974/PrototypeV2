@@ -69,6 +69,16 @@ public class LedgeGrab : MonoBehaviour
 
         if (downHit.collider != null)
         {
+            
+            RaycastHit leftDownHit;
+            Vector3 leftDownStart = (playerTransform.position + Vector3.up * 1.5f) + playerTransform.forward; //float multipliers need adjustement based on character's dimensions
+            Vector3 leftDownEnd = (playerTransform.position + Vector3.up * 0.7f) + playerTransform.forward;
+            Physics.Linecast(leftDownStart, leftDownEnd, out leftDownHit, LayerMask.GetMask("Walls"));
+            Debug.DrawLine(leftDownStart,leftDownEnd);
+            
+            
+            
+            
             //Same but forward to get x and z of position to grab
             RaycastHit fwdHit;
             Vector3 lineFwdStart = new Vector3(playerTransform.position.x, downHit.point.y - 0.1f, playerTransform.position.z); 
@@ -99,7 +109,7 @@ public class LedgeGrab : MonoBehaviour
         _characterController.IsFalling = false;
 
         Vector3 hangPosition = _positionToGrab;
-        Vector3 offset = transform.forward * _forwardOffset + transform.up * _upwardOffset; //offset adjusted to character dimensions
+        Vector3 offset = transform.forward * _forwardOffset + Vector3.up * _upwardOffset; //offset adjusted to character dimensions
         hangPosition += offset;
         transform.position = hangPosition;
         transform.forward = _directionToFace;
@@ -137,7 +147,7 @@ public class LedgeGrab : MonoBehaviour
         _characterController.Animator.SetBool(_isLedgeClimbingHash, false);
         
         //Reposition player
-        _playerNewPosition = _positionToGrab + transform.up * 0f + transform.forward * 1f;
+        _playerNewPosition = _positionToGrab + Vector3.up * 0f + transform.forward * 1f;
         _characterController.RB.position = _playerNewPosition;
         ExitHang();
     }
