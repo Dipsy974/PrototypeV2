@@ -22,6 +22,9 @@ public class NewCharacterLandController : MonoBehaviour
     private bool _isAttacking = false; 
     private bool _isHanging = false;
 
+    private bool _canBounce = false; 
+    private bool _isBouncing = false; 
+
 
     [Header("Ground Check")]
     [SerializeField] private bool _playerIsGrounded = true;
@@ -51,7 +54,10 @@ public class NewCharacterLandController : MonoBehaviour
     [SerializeField] bool _jumpWasPressedLastFrame = false;
     private bool _isFalling;
 
-    
+    [Header("Bounce")]
+    [SerializeField] float _bounceForce = 10.0f;
+    [SerializeField] float _bounceTime = 0.3f;
+    private Vector3 _bounceDirection; 
 
 
     private int _isRunningHash;
@@ -72,6 +78,10 @@ public class NewCharacterLandController : MonoBehaviour
     public bool IsHanging { get { return _isHanging; }  set { _isHanging = value; } }
     public bool IsFalling { get { return _isFalling; }  set { _isFalling = value; }}
     public bool IsJumping { get { return _playerIsJumping; }  set { _playerIsJumping = value; }}
+    public bool CanBounce { get { return _canBounce; }  set { _canBounce = value; }}
+    public bool IsBouncing { get { return _isBouncing; }  set { _isBouncing = value; }}
+    public float BounceForce { get { return _bounceForce; }}
+    public float BounceTime { get { return _bounceTime; }}
 
 
 
@@ -122,8 +132,16 @@ public class NewCharacterLandController : MonoBehaviour
         _playerMoveInput = GetMoveInput(); //Get Data from InputSystem
         _playerIsGrounded = PlayerGroundCheck();
 
+        if (!_isBouncing)
+        {
         _playerMoveInput.y = PlayerGravity();
         _playerMoveInput.y = PlayerJump();
+        }
+        else
+        {
+            PlayerBounce(_bounceDirection);
+        }
+        
 
         _appliedMovement = PlayerMove();
         _cameraRelativeMovement = ConvertToCameraSpace(_appliedMovement);
@@ -292,8 +310,18 @@ public class NewCharacterLandController : MonoBehaviour
             _playerIsJumping = false;
         }
 
-
         return calculatedJumpInput; 
+    }
+
+    public void PlayerBounce(Vector3 direction)
+    {
+        _rb.AddForce(direction * _bounceForce, ForceMode.Impulse); 
+        //_rb.velocity = direction * _bounceForce; 
+    }
+
+    public void SetBounceDirection(Vector3 direction)
+    {
+         _bounceDirection = direction; 
     }
 
     private void SetJumpTimeCounter()
@@ -338,5 +366,11 @@ public class NewCharacterLandController : MonoBehaviour
         return _camController.ActiveCamera == _camController._focusCamera;  //&& !_camController.IsLiveBlend; 
     }
 
-   
+    public IEnumerator CancelBounce()
+    {
+        yield return new WaitForSeconds(_bounceTime);
+        _isBouncing = false;
+    }
+
+
 }
