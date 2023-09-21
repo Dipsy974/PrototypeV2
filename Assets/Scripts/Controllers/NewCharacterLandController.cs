@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 public class NewCharacterLandController : MonoBehaviour
 {
     [SerializeField] private CharacterControlsInput _input;
+    [SerializeField] private CinemachineInputProvider _cinemachineInput;
     private Rigidbody _rb;
     private CapsuleCollider _capsuleCollider;
     private Animator _animator;
@@ -103,6 +105,8 @@ public class NewCharacterLandController : MonoBehaviour
         //LOGIQUE POUR CACHER LE CURSEUR, A PLACER AILLEURS
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
+        _cinemachineInput.XYAxis.Set(_input.PlayerInput.CharacterControls.Look);
 
     }
 
@@ -134,8 +138,8 @@ public class NewCharacterLandController : MonoBehaviour
 
         if (!_isBouncing)
         {
-        _playerMoveInput.y = PlayerGravity();
-        _playerMoveInput.y = PlayerJump();
+            _playerMoveInput.y = PlayerGravity();
+            _playerMoveInput.y = PlayerJump();
         }
         else
         {

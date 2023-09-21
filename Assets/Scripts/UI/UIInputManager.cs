@@ -50,6 +50,7 @@ public class UIInputManager : MonoBehaviour
     {
         if (_isOpenWheelPressed)
         {
+            _inputManager.PlayerInput.CharacterControls.Look.Disable();
             _selectionWheel.gameObject.SetActive(true);
             _inputManager.PlayerInput.CharacterControls.Disable();
             if (_playerInput.currentControlScheme == _mouseScheme)
@@ -60,6 +61,7 @@ public class UIInputManager : MonoBehaviour
         }
         else
         {
+            _inputManager.PlayerInput.CharacterControls.Look.Enable();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             _selectionWheel.gameObject.SetActive(false);
