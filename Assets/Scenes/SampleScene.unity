@@ -1210,7 +1210,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 424891405}
-  m_LocalRotation: {x: -0.048932705, y: 0.024727598, z: -0.003521243, w: 0.99848974}
+  m_LocalRotation: {x: -0.048932705, y: 0.024727602, z: -0.0035212436, w: 0.99848974}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3213,7 +3213,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 944341194}
-  m_LocalRotation: {x: 0.112676725, y: -0.000000017096806, z: 0.0000000019387585,
+  m_LocalRotation: {x: 0.112676725, y: 0.000000017096806, z: -0.0000000019387585,
     w: 0.9936317}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -5753,7 +5753,8 @@ MonoBehaviour:
   _input: {fileID: 1473778227}
   _cinemachineInput: {fileID: 1976706596}
   _camController: {fileID: 946726294}
-  _movementSpeed: 60
+  _movementSpeed: 100
+  _crouchSpeedMultiplier: 0.3
   _playerIsGrounded: 1
   _groundCheckRadiusMultiplier: 0.9
   _groundCheckDistance: 0.05
@@ -5790,9 +5791,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterController: {fileID: 1364527938}
   _input: {fileID: 1473778227}
-  _rollSpeed: 5000
+  _rollSpeed: 7500
   _rollCooldown: 1
-  _rollTime: 1
+  _rollTime: 0.5
 --- !u!114 &1364527940
 MonoBehaviour:
   m_ObjectHideFlags: 0

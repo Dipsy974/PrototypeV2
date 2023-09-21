@@ -26,7 +26,7 @@ public class CharacterPaint : MonoBehaviour
     {
         paintSystem.transform.rotation = Quaternion.Euler(Camera.main.transform.rotation.eulerAngles.x, Camera.main.transform.rotation.eulerAngles.y, 0.0f);
 
-        if (_input.PaintIsPressed && !_isPainting)
+        if (_input.PaintIsPressed && !_isPainting && _characterController.IsCrouching)
         {
             Paint();
         }

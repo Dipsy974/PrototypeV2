@@ -29,7 +29,7 @@ public class CharacterRoll : MonoBehaviour
 
     private void Update()
     {
-        if (_input.RollIsPressed && _canRoll)
+        if (_input.RollIsPressed && _canRoll && !_characterController.IsCrouching)
         {
             StartCoroutine(Roll());
         }
