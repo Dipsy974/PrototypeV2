@@ -26,12 +26,15 @@ public class CharacterLandController : MonoBehaviour
     [SerializeField] private float _movementMultiplier = 30.0f;
     [SerializeField] private float _rotationSpeedMultiplier = 180.0f;
     [SerializeField] private float _pitchSpeedMultiplier = 180.0f;
+    [SerializeField] private float _essai = 180.0f;
 
     [Header("Ground Check")]
     [SerializeField] private bool _playerIsGrounded = true; 
     [SerializeField] [Range(0.0f,1.8f)] private float _groundCheckRadiusMultiplier = 0.9f; 
     [SerializeField] [Range(-0.95f, 1.05f)] private float _groundCheckDistance = 0.05f;
     private RaycastHit _groundCheckHit = new RaycastHit();
+    [SerializeField] private LayerMask layerM;
+    public LayerMask efez; 
 
     [Header("Gravity")]
     [SerializeField] private float _gravityFallCurrent = -100.0f;
@@ -85,7 +88,16 @@ public class CharacterLandController : MonoBehaviour
     {
         float sphereCastRadius = _capsuleCollider.radius * _groundCheckRadiusMultiplier;
         float sphereCastTravelDistance = _capsuleCollider.bounds.extents.y - sphereCastRadius + _groundCheckDistance;
-        return Physics.SphereCast(_rb.position, sphereCastRadius, Vector3.down, out _groundCheckHit, sphereCastTravelDistance);
+
+
+        Vector3 lineDownStart = _rb.position; //float multipliers need adjustement based on character's dimensions
+        Vector3 lineDownEnd = _rb.position + Vector3.down * 3f;
+        Debug.DrawLine(lineDownStart, lineDownEnd);
+        return false;
+
+
+
+        //return Physics.SphereCast(_rb.position, sphereCastRadius, Vector3.down, out _groundCheckHit, sphereCastTravelDistance);
     }
 
     private float PlayerGravity()

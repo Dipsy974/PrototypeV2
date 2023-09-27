@@ -255,7 +255,7 @@ public class NewCharacterLandController : MonoBehaviour
     {
         float sphereCastRadius = _capsuleCollider.radius * _groundCheckRadiusMultiplier;
         float sphereCastTravelDistance = _capsuleCollider.bounds.extents.y - sphereCastRadius + _groundCheckDistance;
-        return Physics.SphereCast(_rb.position, sphereCastRadius, Vector3.down, out _groundCheckHit, sphereCastTravelDistance);
+        return Physics.SphereCast(_rb.position, sphereCastRadius, Vector3.down, out _groundCheckHit, sphereCastTravelDistance, LayerMask.GetMask("Walls"));
     }
 
     private float PlayerGravity()
