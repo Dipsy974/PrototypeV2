@@ -33,6 +33,11 @@ public class LedgeGrab : MonoBehaviour
 
     private void Update()
     {
+
+    }
+
+    private void FixedUpdate()
+    {
         if (_characterController.IsFalling && _canGrabLedge)
         {
             CheckLedgeGrab();
@@ -47,11 +52,6 @@ public class LedgeGrab : MonoBehaviour
             _characterController.Animator.SetBool(_isLedgeClimbingHash, true);
             _isLedgeClimbing = true;
         }
-    }
-
-    private void FixedUpdate()
-    {
-
     }
 
 
@@ -70,29 +70,37 @@ public class LedgeGrab : MonoBehaviour
         if (downHit.collider != null)
         {
             
-            RaycastHit leftDownHit;
-            Vector3 leftDownStart = (playerTransform.position + Vector3.up * 1.5f) + playerTransform.forward; //float multipliers need adjustement based on character's dimensions
-            Vector3 leftDownEnd = (playerTransform.position + Vector3.up * 0.7f) + playerTransform.forward;
-            Physics.Linecast(leftDownStart, leftDownEnd, out leftDownHit, LayerMask.GetMask("Walls"));
-            Debug.DrawLine(leftDownStart,leftDownEnd);
+            // rays at right and left of player to check for walls or irregular ledge
+            RaycastHit leftHit;
+            Vector3 leftStart = new Vector3(playerTransform.position.x, downHit.point.y + 0.5f, playerTransform.position.z) - playerTransform.right * 1.5f;
+            Vector3 leftEnd = new Vector3(playerTransform.position.x, downHit.point.y + 0.05f, playerTransform.position.z) - playerTransform.right * 1.5f + playerTransform.forward;
+            Physics.Linecast(leftStart, leftEnd, out leftHit, LayerMask.GetMask("Walls"));
+            Debug.DrawLine(leftStart,leftEnd);
             
-            
-            
-            
-            //Same but forward to get x and z of position to grab
-            RaycastHit fwdHit;
-            Vector3 lineFwdStart = new Vector3(playerTransform.position.x, downHit.point.y - 0.1f, playerTransform.position.z); 
-            Vector3 lineFwdEnd = new Vector3(playerTransform.position.x, downHit.point.y - 0.2f, playerTransform.position.z) + playerTransform.forward;
-            Physics.Linecast(lineFwdStart, lineFwdEnd, out fwdHit, LayerMask.GetMask("Walls"));
-            Debug.DrawLine(lineFwdStart,lineFwdEnd);
-            
-            if (fwdHit.collider != null)
+            RaycastHit rightHit;
+            Vector3 rightStart = new Vector3(playerTransform.position.x, downHit.point.y + 0.1f, playerTransform.position.z) + playerTransform.right * 1.5f;
+            Vector3 rightEnd = new Vector3(playerTransform.position.x, downHit.point.y + 0.1f, playerTransform.position.z) + playerTransform.right * 1.5f + playerTransform.forward;
+            Physics.Linecast(rightStart, rightEnd, out rightHit, LayerMask.GetMask("Walls"));
+            Debug.DrawLine(rightStart,rightEnd);
+
+            if (leftHit.collider == null && rightHit.collider == null)
             {
-                _positionToGrab = new Vector3(fwdHit.point.x, downHit.point.y, fwdHit.point.z);
-                _directionToFace = -fwdHit.normal;
+                //Same but forward to get x and z of position to grab
+                RaycastHit fwdHit;
+                Vector3 lineFwdStart = new Vector3(playerTransform.position.x, downHit.point.y - 0.1f, playerTransform.position.z); 
+                Vector3 lineFwdEnd = new Vector3(playerTransform.position.x, downHit.point.y - 0.1f, playerTransform.position.z) + playerTransform.forward;
+                Physics.Linecast(lineFwdStart, lineFwdEnd, out fwdHit, LayerMask.GetMask("Walls"));
+                Debug.DrawLine(lineFwdStart,lineFwdEnd);
+            
+                if (fwdHit.collider != null)
+                {
+                    _positionToGrab = new Vector3(fwdHit.point.x, downHit.point.y, fwdHit.point.z);
+                    _directionToFace = -fwdHit.normal;
                 
-                SnapToHangingPoint();
+                    SnapToHangingPoint();
+                }
             }
+           
         }
     }
     
