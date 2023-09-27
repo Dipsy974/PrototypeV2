@@ -165,7 +165,7 @@ public class NewCharacterLandController : MonoBehaviour
         {
             _rb.AddForce(_cameraRelativeMovement, ForceMode.Force);
         }
-
+ 
 
     }
 
