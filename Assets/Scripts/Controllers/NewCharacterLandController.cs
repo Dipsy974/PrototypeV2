@@ -43,7 +43,8 @@ public class NewCharacterLandController : MonoBehaviour
     [SerializeField] private float _gravityFallMax = -500.0f;
     [SerializeField] [Range(-5f, -35f)] private float _gravityFallIncrementAmount = -20.0f;
     [SerializeField] private float _gravityFallIncrementTime = 0.05f;
-    [SerializeField] private float _playerFallTimer = 0.0f;
+    [SerializeField] private float _playerFallTimer = 0.3f;
+    [SerializeField] private float _playerFallTimeMax = 0.3f;
     [SerializeField] private float _gravity = 0.0f;
 
     [Header("Jump")]
@@ -264,6 +265,7 @@ public class NewCharacterLandController : MonoBehaviour
         {
             _gravity = 0.0f;
             _gravityFallCurrent = _gravityFallMin;
+            _playerFallTimer = _playerFallTimeMax;
         }
         else
         { 
