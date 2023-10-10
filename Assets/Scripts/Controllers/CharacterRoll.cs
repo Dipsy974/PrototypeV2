@@ -29,7 +29,7 @@ public class CharacterRoll : MonoBehaviour
 
     private void Update()
     {
-        if (_input.RollIsPressed && _canRoll && !_characterController.IsCrouching)
+        if (_input.SlideIsPressed && _canRoll && !_characterController.IsCrouching)
         {
             StartCoroutine(Roll());
         }
@@ -48,7 +48,7 @@ public class CharacterRoll : MonoBehaviour
     private IEnumerator TriggerRollCooldown()
     {
         yield return new WaitForSeconds(_rollCooldown);
-        yield return new WaitUntil(()=> !_input.RollIsPressed);
+        yield return new WaitUntil(()=> !_input.SlideIsPressed);
         _canRoll = true;
     }
 

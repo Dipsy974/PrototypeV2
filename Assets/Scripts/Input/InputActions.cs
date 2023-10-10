@@ -55,7 +55,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Roll"",
+                    ""name"": ""Slide"",
                     ""type"": ""Button"",
                     ""id"": ""22abdf0a-b5e8-4df5-9183-5d4878391491"",
                     ""expectedControlType"": ""Button"",
@@ -227,7 +227,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Roll"",
+                    ""action"": ""Slide"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -238,7 +238,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Roll"",
+                    ""action"": ""Slide"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -915,7 +915,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_CharacterControls_Move = m_CharacterControls.FindAction("Move", throwIfNotFound: true);
         m_CharacterControls_Look = m_CharacterControls.FindAction("Look", throwIfNotFound: true);
         m_CharacterControls_ChangeCamera = m_CharacterControls.FindAction("ChangeCamera", throwIfNotFound: true);
-        m_CharacterControls_Roll = m_CharacterControls.FindAction("Roll", throwIfNotFound: true);
+        m_CharacterControls_Slide = m_CharacterControls.FindAction("Slide", throwIfNotFound: true);
         m_CharacterControls_Jump = m_CharacterControls.FindAction("Jump", throwIfNotFound: true);
         m_CharacterControls_Attack = m_CharacterControls.FindAction("Attack", throwIfNotFound: true);
         m_CharacterControls_Paint = m_CharacterControls.FindAction("Paint", throwIfNotFound: true);
@@ -996,7 +996,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Move;
     private readonly InputAction m_CharacterControls_Look;
     private readonly InputAction m_CharacterControls_ChangeCamera;
-    private readonly InputAction m_CharacterControls_Roll;
+    private readonly InputAction m_CharacterControls_Slide;
     private readonly InputAction m_CharacterControls_Jump;
     private readonly InputAction m_CharacterControls_Attack;
     private readonly InputAction m_CharacterControls_Paint;
@@ -1009,7 +1009,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_CharacterControls_Move;
         public InputAction @Look => m_Wrapper.m_CharacterControls_Look;
         public InputAction @ChangeCamera => m_Wrapper.m_CharacterControls_ChangeCamera;
-        public InputAction @Roll => m_Wrapper.m_CharacterControls_Roll;
+        public InputAction @Slide => m_Wrapper.m_CharacterControls_Slide;
         public InputAction @Jump => m_Wrapper.m_CharacterControls_Jump;
         public InputAction @Attack => m_Wrapper.m_CharacterControls_Attack;
         public InputAction @Paint => m_Wrapper.m_CharacterControls_Paint;
@@ -1033,9 +1033,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @ChangeCamera.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnChangeCamera;
                 @ChangeCamera.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnChangeCamera;
                 @ChangeCamera.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnChangeCamera;
-                @Roll.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnRoll;
-                @Roll.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnRoll;
-                @Roll.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnRoll;
+                @Slide.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnSlide;
+                @Slide.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnSlide;
+                @Slide.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnSlide;
                 @Jump.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnJump;
@@ -1064,9 +1064,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @ChangeCamera.started += instance.OnChangeCamera;
                 @ChangeCamera.performed += instance.OnChangeCamera;
                 @ChangeCamera.canceled += instance.OnChangeCamera;
-                @Roll.started += instance.OnRoll;
-                @Roll.performed += instance.OnRoll;
-                @Roll.canceled += instance.OnRoll;
+                @Slide.started += instance.OnSlide;
+                @Slide.performed += instance.OnSlide;
+                @Slide.canceled += instance.OnSlide;
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
@@ -1222,7 +1222,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnChangeCamera(InputAction.CallbackContext context);
-        void OnRoll(InputAction.CallbackContext context);
+        void OnSlide(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnPaint(InputAction.CallbackContext context);
