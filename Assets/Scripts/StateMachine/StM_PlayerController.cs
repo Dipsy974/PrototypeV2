@@ -8,8 +8,8 @@ using UnityEngine;
 public class StM_PlayerController : MonoBehaviour
 {
     [Header("References")] 
-    [SerializeField] private CharacterController _controller;
-    //[SerializeField] private Animator _animator;
+    [SerializeField] private Rigidbody _rigidbody;
+    [SerializeField] private StM_GroundCheck _groundCheck;
     [SerializeField] private CinemachineFreeLook _freeLookCam;
     [SerializeField] private StM_InputReader _input;
 
@@ -23,6 +23,8 @@ public class StM_PlayerController : MonoBehaviour
     private const float ZeroF = 0f;
     private float _currentSpeed, _velocity;
 
+    private Vector3 _movement;
+
     private void Awake()
     {
         mainCam = Camera.main.transform;
@@ -31,7 +33,8 @@ public class StM_PlayerController : MonoBehaviour
         
         //adjust position of camera if player is warped
         _freeLookCam.OnTargetObjectWarped(transform, transform.position - _freeLookCam.transform.position - Vector3.forward);
-        
+
+        _rigidbody.freezeRotation = true;
     }
 
     private void Start()
@@ -41,39 +44,44 @@ public class StM_PlayerController : MonoBehaviour
 
     private void Update()
     {
+        _movement = new Vector3(_input.Direction.x, 0f, _input.Direction.y);
+    }
+
+    private void FixedUpdate()
+    {
         HandleMovement();
     }
 
     private void HandleMovement()
     {
-        var movementDirection = new Vector3(_input.Direction.x,0f, _input.Direction.y).normalized;
         
         //Make movement match camera rotation
-        var adjustedDirection = Quaternion.AngleAxis(mainCam.eulerAngles.y, Vector3.up) * movementDirection;
+        var adjustedDirection = Quaternion.AngleAxis(mainCam.eulerAngles.y, Vector3.up) * _movement;
         if (adjustedDirection.magnitude > ZeroF)
         {
             HandleRotation(adjustedDirection);
-            HandleCharacterController(adjustedDirection);
+            HandleHorizontalMovement(adjustedDirection);
             SmoothSpeed(adjustedDirection.magnitude);
         }
         else
         {
             SmoothSpeed(ZeroF);
+            _rigidbody.velocity = new Vector3(ZeroF, _rigidbody.velocity.y, ZeroF);
         }
     }
 
-    private void HandleCharacterController(Vector3 adjustedDirection)
+    private void HandleHorizontalMovement(Vector3 adjustedDirection)
     {
         //move
-        var adjustedMovement = adjustedDirection * (_moveSpeed * Time.deltaTime);
-        _controller.Move(adjustedMovement);
+        Vector3 velocity = adjustedDirection * (_moveSpeed * Time.fixedDeltaTime);
+        _rigidbody.velocity = new Vector3(velocity.x, _rigidbody.velocity.y, velocity.z);
+        
     }
 
     private void HandleRotation(Vector3 adjustedDirection)
     {
         var targetRotation = Quaternion.LookRotation(adjustedDirection);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-        transform.LookAt(transform.position + adjustedDirection);
     }
 
     private void SmoothSpeed(float value)
