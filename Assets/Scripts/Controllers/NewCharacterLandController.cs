@@ -111,8 +111,8 @@ public class NewCharacterLandController : MonoBehaviour
         _isCrouchingHash = Animator.StringToHash("isCrouching");
 
         //LOGIQUE POUR CACHER LE CURSEUR, A PLACER AILLEURS
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
         
         _cinemachineInput.XYAxis.Set(_input.PlayerInput.CharacterControls.Look);
 
