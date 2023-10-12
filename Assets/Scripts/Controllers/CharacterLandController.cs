@@ -53,8 +53,8 @@ public class CharacterLandController : MonoBehaviour
 
         _isRunningHash = Animator.StringToHash("isRunning");
         //LOGIQUE POUR CACHER LE CURSEUR, A PLACER AILLEURS
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
     }
 
     private void FixedUpdate()
