@@ -1819,12 +1819,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 2066905731}
-  _groundCheck: {fileID: 0}
+  _groundCheck: {fileID: 2066905733}
   _freeLookCam: {fileID: 1727165629}
   _input: {fileID: 11400000, guid: 39aa687447067fb429b285afe1ee1d15, type: 2}
   _moveSpeed: 300
   _rotationSpeed: 300
   _smoothTime: 0.1
+  _jumpForce: 30
+  _jumpDuration: 0.5
+  _jumpCooldown: 0
+  _jumpMaxHeight: 2
+  _gravityMultiplier: 3
 --- !u!4 &2066905730
 Transform:
   m_ObjectHideFlags: 0
