@@ -21,6 +21,7 @@ public class NewCharacterLandController : MonoBehaviour
     [SerializeField] private float _movementSpeed;
     [SerializeField] private float _crouchSpeedMultiplier = 0.5f;
     private float _speedMultiplier;
+    private float _desiredMoveSpeed, _lastDesiredMoveSpeed;
     
 
     private bool _isRolling = false; 
@@ -284,7 +285,7 @@ public class NewCharacterLandController : MonoBehaviour
         return _gravity;
     }
 
-    private Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
+    public Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
     {
 
         float currentYValue = vectorToRotate.y;
@@ -307,7 +308,7 @@ public class NewCharacterLandController : MonoBehaviour
 
     }
 
-    private Vector3 GetMoveInput()
+    public Vector3 GetMoveInput()
     {
         return new Vector3(_input.MoveInput.x, 0.0f, _input.MoveInput.y);
     }
