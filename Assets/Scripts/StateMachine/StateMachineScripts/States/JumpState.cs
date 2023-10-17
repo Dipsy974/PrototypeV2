@@ -13,8 +13,8 @@ public class JumpState : BaseState
 
     public override void FixedUpdate()
     {
-        _playerController.HandleJump();
-        _playerController.HandleMovement();
+        //HandleJump
+        //_playerController.HandleMovement();
     }
     
     public override void OnExit()

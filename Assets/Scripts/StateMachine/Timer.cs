@@ -15,6 +15,7 @@ public abstract class Timer
     protected Timer(float value)
     {
         initialTime = value;
+        Time = initialTime;
         IsRunning = false;
     }
 

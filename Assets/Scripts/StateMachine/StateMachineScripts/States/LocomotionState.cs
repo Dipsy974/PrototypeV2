@@ -13,7 +13,7 @@ public class LocomotionState : BaseState
 
     public override void FixedUpdate()
     {
-        _playerController.HandleMovement();
+        //_playerController.HandleMovement();
     }
     
     public override void OnExit()
