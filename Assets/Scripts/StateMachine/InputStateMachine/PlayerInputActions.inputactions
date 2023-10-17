@@ -1,5 +1,5 @@
 {
-    "name": "InputActions",
+    "name": "PlayerInputActions",
     "maps": [
         {
             "name": "CharacterControls",
@@ -24,18 +24,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ChangeCamera",
+                    "name": "MouseControlCamera",
                     "type": "Button",
-                    "id": "823f52fc-2417-49ae-8fe3-24d9b6a59b0c",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Slide",
-                    "type": "Button",
-                    "id": "22abdf0a-b5e8-4df5-9183-5d4878391491",
+                    "id": "b0485671-8ace-4a89-8e46-b8a326339661",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -43,48 +34,12 @@
                 },
                 {
                     "name": "Jump",
-                    "type": "Value",
-                    "id": "d8bf3eeb-0f0a-48ec-9ee3-9bf3173b7ee3",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Attack",
                     "type": "Button",
-                    "id": "50c83c58-ba9c-424f-9b1c-e8ddecc07a1a",
+                    "id": "fa7909a3-eade-408f-979a-da4b76ccfc0b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Paint",
-                    "type": "Button",
-                    "id": "7a1be90b-4fd3-4995-bdcd-d58c19ad138a",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "DownLedge",
-                    "type": "Button",
-                    "id": "2e7ef39d-6653-42ee-a4f9-8bf839750c75",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "UpLedge",
-                    "type": "Button",
-                    "id": "aeb25d64-bfd2-417d-910e-844b7546d759",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -178,51 +133,18 @@
                 },
                 {
                     "name": "",
-                    "id": "4ca35eb7-b030-4f4c-842c-2629cf8fa64a",
-                    "path": "<Keyboard>/q",
+                    "id": "0494c4e4-dbe9-4ed6-bee6-dcb5b601ab1b",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "ChangeCamera",
+                    "action": "MouseControlCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "df9cef05-75ae-411a-8084-fb1e17e5723b",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "ChangeCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1f6c560c-9acb-4172-b2d3-90cb70478a36",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Slide",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0295e156-f7e3-494c-b6ca-1bb9c30fda2e",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Slide",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e5305d11-d581-4188-81e8-f9a718c8eb6e",
+                    "id": "6b9b185b-815c-4692-8a1c-92706e4f3242",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
@@ -233,122 +155,12 @@
                 },
                 {
                     "name": "",
-                    "id": "5d7a7948-29e8-46ad-9ec9-a1101a63fc0f",
+                    "id": "4fafb504-361a-4b87-996f-f2eab2228486",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "",
                     "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b1d3d1a6-b156-48df-a3db-144772640024",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "dfd7cbe4-8f7a-476e-9635-56b37ba5bbeb",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7f435c76-706e-465f-b74c-19018a345894",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Paint",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d3672502-5951-42f1-9bfa-f8fecf966149",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Paint",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2c355284-74cb-4b91-ba3e-03c5ce9a0d71",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "DownLedge",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6f8453e1-6408-4c3b-8088-cfb0a343b8bb",
-                    "path": "<Gamepad>/leftStick/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "DownLedge",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "461e2bba-a5f1-42b5-b5e0-da754d30d654",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "UpLedge",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "192717c2-cb4b-47b1-a51f-ba8c62023095",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UpLedge",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "da22be67-35fd-4ea7-8e7e-27daf89aec8b",
-                    "path": "<Gamepad>/leftStick/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UpLedge",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9fa36f10-92b4-4cff-bffd-c303f5b2731b",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UpLedge",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

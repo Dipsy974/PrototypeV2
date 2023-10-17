@@ -11,7 +11,7 @@ public class CharacterControlsInput : MonoBehaviour
 
     public bool CameraChangeIsPressed { get; private set; } = false; 
     
-    public bool RollIsPressed { get; private set; } = false; 
+    public bool SlideIsPressed { get; private set; } = false; 
     public bool JumpIsPressed { get; private set; } = false; 
     public bool PaintIsPressed { get; private set; } = false; 
     
@@ -45,6 +45,9 @@ public class CharacterControlsInput : MonoBehaviour
         _input.CharacterControls.Paint.started += SetPaint;
         _input.CharacterControls.Paint.canceled += SetPaint;
         
+        _input.CharacterControls.Slide.started += SetSlide;
+        _input.CharacterControls.Slide.canceled += SetSlide;
+        
         _input.CharacterControls.DownLedge.started += SetDownLedge;
         _input.CharacterControls.DownLedge.performed += SetDownLedge;
         _input.CharacterControls.DownLedge.canceled += SetDownLedge;
@@ -71,6 +74,9 @@ public class CharacterControlsInput : MonoBehaviour
         _input.CharacterControls.Paint.started -= SetPaint;
         _input.CharacterControls.Paint.canceled -= SetPaint;
         
+        _input.CharacterControls.Slide.started -= SetSlide;
+        _input.CharacterControls.Slide.canceled -= SetSlide;
+        
         _input.CharacterControls.DownLedge.started -= SetDownLedge;
         _input.CharacterControls.DownLedge.performed -= SetDownLedge;
         _input.CharacterControls.DownLedge.canceled -= SetDownLedge;
@@ -81,7 +87,6 @@ public class CharacterControlsInput : MonoBehaviour
     private void Update()
     {
         CameraChangeIsPressed = _input.CharacterControls.ChangeCamera.WasPressedThisFrame(); 
-        RollIsPressed = _input.CharacterControls.Roll.WasPressedThisFrame();
     }
 
     private void SetMove(InputAction.CallbackContext ctx)
@@ -103,6 +108,11 @@ public class CharacterControlsInput : MonoBehaviour
     private void SetPaint(InputAction.CallbackContext ctx)
     {
         PaintIsPressed = ctx.started;
+    }
+
+    private void SetSlide(InputAction.CallbackContext ctx)
+    {
+        SlideIsPressed = ctx.started;
     }
 
     private void SetLook(InputAction.CallbackContext ctx)
