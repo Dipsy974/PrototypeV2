@@ -36,6 +36,8 @@ public class StM_PlayerController : MonoBehaviour
     private CountdownTimer _jumpTimer;
     private CountdownTimer _jumpCooldownTimer;
 
+    private StateMachine _stateMachine;
+
     private void Awake()
     {
         mainCam = Camera.main.transform;
@@ -52,8 +54,26 @@ public class StM_PlayerController : MonoBehaviour
         _jumpCooldownTimer = new CountdownTimer(_jumpCooldown);
         _timers = new List<Timer> { _jumpTimer, _jumpCooldownTimer };
 
+        _jumpTimer.OnTimerStart += () => _jumpVelocity = _jumpForce;
         _jumpTimer.OnTimerStop += () => _jumpCooldownTimer.Start();
+        
+        // State Machine
+        _stateMachine = new StateMachine();
+        
+        // States
+        var locomotionState = new LocomotionState(this);
+        var jumpState = new JumpState(this);
+        
+        // Transitions
+        At(locomotionState, jumpState, new FuncPredicate(()=> _jumpTimer.IsRunning));
+        At(jumpState, locomotionState, new FuncPredicate(()=> _groundCheck.IsGrounded && !_jumpTimer.IsRunning));
+        
+        // Set Initial State
+        _stateMachine.SetState(locomotionState);
     }
+
+    void At(IState from, IState to, IPredicate condition) => _stateMachine.AddTransition(from, to, condition);
+    void Any(IState to, IPredicate condition) => _stateMachine.AddAnyTransition(to, condition);
 
     private void Start()
     {
@@ -86,14 +106,14 @@ public class StM_PlayerController : MonoBehaviour
     private void Update()
     {
         _movement = new Vector3(_input.Direction.x, 0f, _input.Direction.y);
+        _stateMachine.Update();
 
         HandleTimers();
     }
 
     private void FixedUpdate()
     {
-        HandleJump();
-        HandleMovement();
+        _stateMachine.FixedUpdate();
     }
 
     private void HandleTimers()
@@ -104,7 +124,7 @@ public class StM_PlayerController : MonoBehaviour
         }
     }
 
-    private void HandleJump()
+    public void HandleJump()
     {
         if (!_jumpTimer.IsRunning && _groundCheck.IsGrounded)
         {
@@ -113,23 +133,14 @@ public class StM_PlayerController : MonoBehaviour
             return;
         }
 
-        if (_jumpTimer.IsRunning)
-        {
-            float launchPoint = 0.9f;
-            if (_jumpTimer.Progress > launchPoint)
-            {
-                _jumpVelocity = Mathf.Sqrt((2 * _jumpMaxHeight * Mathf.Abs(Physics.gravity.y)));
-            }
-            else
-            {
-                _jumpVelocity += Physics.gravity.y * _gravityMultiplier * Time.fixedDeltaTime;
-            }
-
-            _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, _jumpVelocity, _rigidbody.velocity.z);
+        if (!_jumpTimer.IsRunning){
+            _jumpVelocity += Physics.gravity.y * _gravityMultiplier * Time.fixedDeltaTime;
         }
+        
+        _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, _jumpVelocity, _rigidbody.velocity.z);
     }
 
-    private void HandleMovement()
+    public void HandleMovement()
     {
         
         //Make movement match camera rotation

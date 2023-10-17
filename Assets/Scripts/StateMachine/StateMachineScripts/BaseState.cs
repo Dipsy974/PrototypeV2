@@ -8,22 +8,22 @@
         this._playerController = player;
     }
     
-    public void OnEnter()
+    public virtual void OnEnter()
     {
         //noop
     }
 
-    public void Update()
+    public virtual void Update()
     {
         //noop
     }
 
-    public void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         //noop
     }
 
-    public void OnExit()
+    public virtual void OnExit()
     {
         //noop
     }
