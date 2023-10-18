@@ -2391,7 +2391,7 @@ MonoBehaviour:
   _continualJumpForceMultiplier: 0.1
   _jumpTime: 0.3
   _coyoteTime: 0.15
-  _jumpBufferTime: 0.2
+  _jumpBufferTime: 0.3
 --- !u!4 &2066905730
 Transform:
   m_ObjectHideFlags: 0

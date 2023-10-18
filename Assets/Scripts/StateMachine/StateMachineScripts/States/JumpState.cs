@@ -5,35 +5,34 @@ using UnityEngine;
 
 public class JumpState : BaseState
 {
-    public JumpState(StM_PlayerController player) : base(player) { }
+    public JumpState(StM_PlayerController player, StM_InputReader input) : base(player, input) { }
     public override void OnEnter()
     {
-        Debug.Log("entering jump");
+        _playerController.CoyoteTimeCounter.Stop();
         InitialJump();
     }
 
     public override void FixedUpdate()
     {
+        _playerController.HandleRotation();
         HandleJump();
+        _playerController.PlayerMove();
     }
     
     public override void OnExit()
     {
-        Debug.Log("exiting jump");
+        _playerController.PlayerFallTimer.Start();
+        _playerController.CoyoteTimeCounter.Stop();
     }
     
     private void InitialJump()
     {
         _playerController.PlayerMoveInputY = _playerController.InitialJumpForce;
-        _playerController.JumpBufferTimeCounter.Stop();
-        _playerController.CoyoteTimeCounter.Stop();
     }
     
     private void HandleJump()
     {
-        
         var calculatedJumpInput = _playerController.InitialJumpForce * _playerController.ContinualJumpForceMultiplier;
-        
         _playerController.PlayerMoveInputY =  calculatedJumpInput; 
     }
 }

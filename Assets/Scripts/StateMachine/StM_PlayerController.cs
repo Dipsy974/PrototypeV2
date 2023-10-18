@@ -25,7 +25,6 @@ public class StM_PlayerController : MonoBehaviour
     [SerializeField] [Range(-5f, -35f)] private float _gravityFallIncrementAmount = -20.0f;
     [SerializeField] private float _gravityFallIncrementTime = 0.05f;
     [SerializeField] private float _playerFallTimeMax = 0.3f;
-    [SerializeField] private float _gravity = 0.0f;
 
     [Header("Jump Parameters")] 
     [SerializeField] float _initialJumpForce = 750.0f;
@@ -47,17 +46,24 @@ public class StM_PlayerController : MonoBehaviour
 
     private StateMachine _stateMachine;
     
-    //GETTERS
+    //SIMPLE GETTERS
     public CountdownTimer JumpTimer { get { return _jumpTimer; } }
     public CountdownTimer PlayerFallTimer { get { return _playerFallTimer; } }
     public CountdownTimer CoyoteTimeCounter { get { return _coyoteTimeCounter; } }
     public CountdownTimer JumpBufferTimeCounter { get { return _jumpBufferTimeCounter; } }
+    public float GravityFallMin { get { return _gravityFallMin; } }
+    public float GravityFallMax { get { return _gravityFallMax; } }
+    public float GravityFallIncrementAmount { get { return _gravityFallIncrementAmount; } }
+    public float GravityFallIncrementTime { get { return _gravityFallIncrementTime; } }
+    public float PlayerFallTimeMax { get { return _playerFallTimeMax; } }
     
     
-    //GETTERS & SETTERS
+    //GETTERS + SETTERS
     public float PlayerMoveInputY { get { return _playerMoveInput.y; } set { _playerMoveInput.y = value; } }
     public float InitialJumpForce { get { return _initialJumpForce; }set { _initialJumpForce = value; } }
     public float ContinualJumpForceMultiplier { get { return _continualJumpForceMultiplier; }set { _continualJumpForceMultiplier = value; } }
+    public float GravityFallCurrent { get { return _gravityFallCurrent; }set { _gravityFallCurrent = value; } }
+
 
     private void Awake()
     {
@@ -77,23 +83,30 @@ public class StM_PlayerController : MonoBehaviour
         _coyoteTimeCounter = new CountdownTimer(_coyoteTime);
         _jumpBufferTimeCounter = new CountdownTimer(_jumpBufferTime);
         
-        _timers = new List<Timer> { _jumpTimer, _playerFallTimer };
+        _timers = new List<Timer> { _jumpTimer, _playerFallTimer, _coyoteTimeCounter, _jumpBufferTimeCounter };
         
-        _jumpTimer.OnTimerStop += () => _playerFallTimer.Start();
+        //_jumpTimer.OnTimerStop += () => ;
         
         // State Machine creation
         _stateMachine = new StateMachine();
         
         // States creation
-        var locomotionState = new LocomotionState(this);
-        var jumpState = new JumpState(this);
+        var groundedState = new GroundedState(this, _input);
+        var jumpState = new JumpState(this, _input);
+        var fallState = new FallState(this, _input);
         
         // Transitions creation
-        At(locomotionState, jumpState, new FuncPredicate(()=> _jumpTimer.IsRunning));
-        At(jumpState, locomotionState, new FuncPredicate(()=> !_jumpTimer.IsRunning));
+        At(groundedState, jumpState, new FuncPredicate(()=> _jumpTimer.IsRunning));
+        At(groundedState, fallState, new FuncPredicate(()=> !_jumpTimer.IsRunning && !_groundCheck.IsGrounded));
+        
+        At(jumpState, fallState, new FuncPredicate(()=> !_jumpTimer.IsRunning));
+        
+        At(fallState, groundedState, new FuncPredicate(()=> _groundCheck.IsGrounded));
+        At(fallState, jumpState, new FuncPredicate(()=> _jumpTimer.IsRunning));
+        
         
         // Set Initial State
-        _stateMachine.SetState(locomotionState);
+        _stateMachine.SetState(groundedState);
     }
 
     void At(IState from, IState to, IPredicate condition) => _stateMachine.AddTransition(from, to, condition);
@@ -114,7 +127,6 @@ public class StM_PlayerController : MonoBehaviour
         _input.Jump += OnJump;
     }
     
-    
     private void Update()
     {
         _stateMachine.Update();
@@ -123,20 +135,13 @@ public class StM_PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        HandleRotation();
-        
         _playerMoveInput = new Vector3(_input.Direction.x, 0f, _input.Direction.y);
-        
-        _playerMoveInput.y = PlayerGravity();
+ 
         _stateMachine.FixedUpdate();
-        _appliedMovement = PlayerMove();
-        
-        
+
         _cameraRelativeMovement = ConvertToCameraSpace(_appliedMovement);
         
         _rigidbody.AddForce(_cameraRelativeMovement, ForceMode.Force);
-        
-        
     }
 
     private void HandleTimers()
@@ -157,51 +162,9 @@ public class StM_PlayerController : MonoBehaviour
         {
             _jumpTimer.Stop();
         }
-        
-    }
-    private Vector3 PlayerMove()
-    {
-        Vector3 calculatedPlayerMovement = (new Vector3(_playerMoveInput.x * _moveSpeed *_rigidbody.mass,
-            _playerMoveInput.y * _rigidbody.mass,
-            _playerMoveInput.z * _moveSpeed * _rigidbody.mass));
-        
-        return calculatedPlayerMovement;
     }
     
-    private float PlayerGravity()
-    {
-        if (_groundCheck.IsGrounded)
-        {
-            _gravity = 0.0f;
-            _gravityFallCurrent = _gravityFallMin;
-            _playerFallTimer.Stop();
-            _playerFallTimer.Reset(_playerFallTimeMax);
-            if (!_jumpTimer.IsRunning)
-            {
-                _jumpTimer.Stop();
-                _jumpTimer.Reset();
-            }
-        }
-        else if(!_playerFallTimer.IsRunning)
-        {
-            _gravity = HandleFallGravity();
-        }
-
-        return _gravity;
-    }
-
-    private float HandleFallGravity()
-    {
-        if (_gravityFallCurrent > _gravityFallMax)
-        {
-            _gravityFallCurrent += _gravityFallIncrementAmount;
-        }
-        _playerFallTimer.Reset(_gravityFallIncrementTime); 
-        _gravity = _gravityFallCurrent;
-        return _gravity;
-    }
-    
-    public Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
+    private Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
     {
         float currentYValue = vectorToRotate.y;
 
@@ -222,7 +185,16 @@ public class StM_PlayerController : MonoBehaviour
         return vectorRotatedToCameraSpace;
     }
     
-    private void HandleRotation()
+    public void PlayerMove()
+    {
+        Vector3 calculatedPlayerMovement = (new Vector3(_playerMoveInput.x * _moveSpeed *_rigidbody.mass,
+            _playerMoveInput.y * _rigidbody.mass,
+            _playerMoveInput.z * _moveSpeed * _rigidbody.mass));
+        
+        _appliedMovement = calculatedPlayerMovement;
+    }
+    
+    public void HandleRotation()
     {
         Vector3 positionToLookAt;
 
@@ -231,7 +203,7 @@ public class StM_PlayerController : MonoBehaviour
         positionToLookAt.z = _cameraRelativeMovement.z;
 
         Quaternion currentRotation = transform.rotation;
-        if (_input.Direction.magnitude > ZeroF)
+        if (_input.Direction.magnitude > ZeroF && positionToLookAt != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, _rotationSpeed * Time.deltaTime);
