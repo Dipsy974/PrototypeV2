@@ -33,8 +33,6 @@ public class StM_PlayerController : MonoBehaviour
     [SerializeField] float _jumpTime = 0.175f;
     [SerializeField] float _coyoteTime = 0.15f;
     [SerializeField] float _jumpBufferTime = 0.2f;
-    [SerializeField] bool _playerIsJumping = false;
-    [SerializeField] bool _jumpWasPressedLastFrame = false;
 
     private Transform mainCam;
 
@@ -45,10 +43,21 @@ public class StM_PlayerController : MonoBehaviour
 
     private List<Timer> _timers;
     private CountdownTimer _jumpTimer;
-    private CountdownTimer _jumpCooldownTimer;
     private CountdownTimer _playerFallTimer , _coyoteTimeCounter, _jumpBufferTimeCounter;
 
     private StateMachine _stateMachine;
+    
+    //GETTERS
+    public CountdownTimer JumpTimer { get { return _jumpTimer; } }
+    public CountdownTimer PlayerFallTimer { get { return _playerFallTimer; } }
+    public CountdownTimer CoyoteTimeCounter { get { return _coyoteTimeCounter; } }
+    public CountdownTimer JumpBufferTimeCounter { get { return _jumpBufferTimeCounter; } }
+    
+    
+    //GETTERS & SETTERS
+    public float PlayerMoveInputY { get { return _playerMoveInput.y; } set { _playerMoveInput.y = value; } }
+    public float InitialJumpForce { get { return _initialJumpForce; }set { _initialJumpForce = value; } }
+    public float ContinualJumpForceMultiplier { get { return _continualJumpForceMultiplier; }set { _continualJumpForceMultiplier = value; } }
 
     private void Awake()
     {
@@ -63,26 +72,25 @@ public class StM_PlayerController : MonoBehaviour
         
         //Timers setup
         _jumpTimer = new CountdownTimer(_jumpTime);
-        _jumpCooldownTimer = new CountdownTimer(ZeroF);
+
         _playerFallTimer = new CountdownTimer(_playerFallTimeMax);
         _coyoteTimeCounter = new CountdownTimer(_coyoteTime);
         _jumpBufferTimeCounter = new CountdownTimer(_jumpBufferTime);
         
-        _timers = new List<Timer> { _jumpTimer, _jumpCooldownTimer, _playerFallTimer };
+        _timers = new List<Timer> { _jumpTimer, _playerFallTimer };
         
-
-        _jumpTimer.OnTimerStart += () => InitialJump();
+        _jumpTimer.OnTimerStop += () => _playerFallTimer.Start();
         
-        // State Machine
+        // State Machine creation
         _stateMachine = new StateMachine();
         
-        // States
+        // States creation
         var locomotionState = new LocomotionState(this);
         var jumpState = new JumpState(this);
         
-        // Transitions
+        // Transitions creation
         At(locomotionState, jumpState, new FuncPredicate(()=> _jumpTimer.IsRunning));
-        At(jumpState, locomotionState, new FuncPredicate(()=> _groundCheck.IsGrounded && !_jumpTimer.IsRunning));
+        At(jumpState, locomotionState, new FuncPredicate(()=> !_jumpTimer.IsRunning));
         
         // Set Initial State
         _stateMachine.SetState(locomotionState);
@@ -120,14 +128,15 @@ public class StM_PlayerController : MonoBehaviour
         _playerMoveInput = new Vector3(_input.Direction.x, 0f, _input.Direction.y);
         
         _playerMoveInput.y = PlayerGravity();
-        _playerMoveInput.y = HandleJump();
-        
+        _stateMachine.FixedUpdate();
         _appliedMovement = PlayerMove();
+        
+        
         _cameraRelativeMovement = ConvertToCameraSpace(_appliedMovement);
         
         _rigidbody.AddForce(_cameraRelativeMovement, ForceMode.Force);
         
-        _stateMachine.FixedUpdate();
+        
     }
 
     private void HandleTimers()
@@ -165,16 +174,17 @@ public class StM_PlayerController : MonoBehaviour
         {
             _gravity = 0.0f;
             _gravityFallCurrent = _gravityFallMin;
-            _playerFallTimer.Pause();
+            _playerFallTimer.Stop();
             _playerFallTimer.Reset(_playerFallTimeMax);
-        }
-        else
-        {
-            _playerFallTimer.Resume();
-            if (_playerFallTimer.IsFinished)
+            if (!_jumpTimer.IsRunning)
             {
-                HandleFallGravity();
+                _jumpTimer.Stop();
+                _jumpTimer.Reset();
             }
+        }
+        else if(!_playerFallTimer.IsRunning)
+        {
+            _gravity = HandleFallGravity();
         }
 
         return _gravity;
@@ -191,48 +201,12 @@ public class StM_PlayerController : MonoBehaviour
         return _gravity;
     }
     
-    private float HandleJump()
-    {
-        if (!_jumpTimer.IsRunning && _groundCheck.IsGrounded)
-        {
-            _coyoteTimeCounter.Stop();
-            _coyoteTimeCounter.Reset();
-            _jumpTimer.Stop();
-            _jumpTimer.Reset();
-            return ZeroF;
-        }
-        else
-        {
-            _coyoteTimeCounter.Resume();
-        }
- 
-        float calculatedJumpInput = _playerMoveInput.y;
-        _jumpBufferTimeCounter.Resume();
-        
-        if (_jumpTimer.IsRunning)
-        {
-            calculatedJumpInput = _initialJumpForce * _continualJumpForceMultiplier;
-        }
-
-        return calculatedJumpInput; 
-    }
-
-    private void InitialJump()
-    {
-        if(!_jumpBufferTimeCounter.IsFinished && !_playerIsJumping && !_coyoteTimeCounter.IsFinished)
-        {
-            _playerMoveInput.y = _initialJumpForce;
-            _jumpBufferTimeCounter.Stop();
-            _coyoteTimeCounter.Stop();
-        }
-    }
-    
     public Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
     {
         float currentYValue = vectorToRotate.y;
 
-        Vector3 cameraForward = Camera.main.transform.forward;
-        Vector3 cameraRight = Camera.main.transform.right;
+        Vector3 cameraForward = mainCam.forward;
+        Vector3 cameraRight = mainCam.right;
 
         cameraForward.y = 0;
         cameraRight.y = 0;
