@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MI_Rock
+  m_Name: M_Bridge001
   m_Shader: {fileID: -6465566751694194690, guid: 861272e545a69234e9c4d413b38a566b,
     type: 3}
   m_ValidKeywords: []
@@ -39,7 +39,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: ff3946e55bfeea74bb29350f2d85f29a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 093c46826985b424cb68825711670e83, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicMap:
@@ -47,7 +47,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: 3f8015f0d9051f04390f10f0b8b9d321, type: 3}
+        m_Texture: {fileID: 2800000, guid: cd5c3505d17e462449a5d36d02d31e8b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_6d859f020c564a7d9cfeab30443c4752_Texture_1:
@@ -78,7 +78,7 @@ Material:
     m_Floats:
     - _Blend: 0
     - _HatchingSpeed: 2.5
-    - _NormalStrength: 0
+    - _NormalStrength: 0.416
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RippleSmoothing: 0.3
