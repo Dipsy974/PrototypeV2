@@ -8,6 +8,8 @@ public class GroundedState : BaseState
 
     public override void OnEnter()
     { 
+        _input.Jump += OnJump;
+        
         _playerController.CoyoteTimeCounter.Stop();
         //jump right when entering state in case of jump buffer
         if (_playerController.JumpBufferTimeCounter.IsRunning)
@@ -40,5 +42,15 @@ public class GroundedState : BaseState
     public override void OnExit()
     {
         _playerController.CoyoteTimeCounter.Start();
+        
+        _input.Jump -= OnJump;
+    }
+    
+    void OnJump(bool performed)
+    {
+        if (performed)
+        {
+            _playerController.JumpTimer.Start();
+        }
     }
 }

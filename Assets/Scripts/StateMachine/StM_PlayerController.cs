@@ -119,12 +119,12 @@ public class StM_PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        _input.Jump += OnJump;
+        
     }
 
     private void OnDisable()
     {
-        _input.Jump += OnJump;
+        
     }
     
     private void Update()
@@ -152,17 +152,6 @@ public class StM_PlayerController : MonoBehaviour
         }
     }
     
-    void OnJump(bool performed)
-    {
-        if (performed && !_jumpTimer.IsRunning && _groundCheck.IsGrounded)
-        {
-            _jumpTimer.Start();
-        }
-        else if (!performed && _jumpTimer.IsRunning)
-        {
-            _jumpTimer.Stop();
-        }
-    }
     
     private Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
     {

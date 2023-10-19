@@ -8,6 +8,8 @@ public class JumpState : BaseState
     public JumpState(StM_PlayerController player, StM_InputReader input) : base(player, input) { }
     public override void OnEnter()
     {
+        _input.Jump += OnJump;
+        
         _playerController.CoyoteTimeCounter.Stop();
         InitialJump();
     }
@@ -23,6 +25,8 @@ public class JumpState : BaseState
     {
         _playerController.PlayerFallTimer.Start();
         _playerController.CoyoteTimeCounter.Stop();
+        
+        _input.Jump -= OnJump;
     }
     
     private void InitialJump()
@@ -34,5 +38,13 @@ public class JumpState : BaseState
     {
         var calculatedJumpInput = _playerController.InitialJumpForce * _playerController.ContinualJumpForceMultiplier;
         _playerController.PlayerMoveInputY =  calculatedJumpInput; 
+    }
+    
+    void OnJump(bool performed)
+    {
+        if (!performed)
+        {
+            _playerController.JumpTimer.Stop();
+        }
     }
 }
