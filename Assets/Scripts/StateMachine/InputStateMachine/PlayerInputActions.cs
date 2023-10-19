@@ -46,15 +46,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""MouseControlCamera"",
-                    ""type"": ""Button"",
-                    ""id"": ""b0485671-8ace-4a89-8e46-b8a326339661"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""fa7909a3-eade-408f-979a-da4b76ccfc0b"",
@@ -150,17 +141,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": ""ScaleVector2(x=0.03,y=0.03)"",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0494c4e4-dbe9-4ed6-bee6-dcb5b601ab1b"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""MouseControlCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -726,7 +706,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_CharacterControls = asset.FindActionMap("CharacterControls", throwIfNotFound: true);
         m_CharacterControls_Move = m_CharacterControls.FindAction("Move", throwIfNotFound: true);
         m_CharacterControls_Look = m_CharacterControls.FindAction("Look", throwIfNotFound: true);
-        m_CharacterControls_MouseControlCamera = m_CharacterControls.FindAction("MouseControlCamera", throwIfNotFound: true);
         m_CharacterControls_Jump = m_CharacterControls.FindAction("Jump", throwIfNotFound: true);
         // UIControls
         m_UIControls = asset.FindActionMap("UIControls", throwIfNotFound: true);
@@ -802,7 +781,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private ICharacterControlsActions m_CharacterControlsActionsCallbackInterface;
     private readonly InputAction m_CharacterControls_Move;
     private readonly InputAction m_CharacterControls_Look;
-    private readonly InputAction m_CharacterControls_MouseControlCamera;
     private readonly InputAction m_CharacterControls_Jump;
     public struct CharacterControlsActions
     {
@@ -810,7 +788,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public CharacterControlsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_CharacterControls_Move;
         public InputAction @Look => m_Wrapper.m_CharacterControls_Look;
-        public InputAction @MouseControlCamera => m_Wrapper.m_CharacterControls_MouseControlCamera;
         public InputAction @Jump => m_Wrapper.m_CharacterControls_Jump;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
@@ -827,9 +804,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Look.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnLook;
                 @Look.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnLook;
                 @Look.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnLook;
-                @MouseControlCamera.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnMouseControlCamera;
-                @MouseControlCamera.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnMouseControlCamera;
-                @MouseControlCamera.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnMouseControlCamera;
                 @Jump.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnJump;
@@ -843,9 +817,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
-                @MouseControlCamera.started += instance.OnMouseControlCamera;
-                @MouseControlCamera.performed += instance.OnMouseControlCamera;
-                @MouseControlCamera.canceled += instance.OnMouseControlCamera;
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
@@ -988,7 +959,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
-        void OnMouseControlCamera(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
     }
     public interface IUIControlsActions
