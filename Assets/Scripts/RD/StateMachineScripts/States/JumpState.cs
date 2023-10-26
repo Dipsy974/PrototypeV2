@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class JumpState : BaseState
 {
     public JumpState(StM_PlayerController player, StM_InputReader input) : base(player, input) { }
+
     public override void OnEnter()
     {
         _input.Jump += OnJump;

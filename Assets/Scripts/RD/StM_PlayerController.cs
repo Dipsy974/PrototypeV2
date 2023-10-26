@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class StM_PlayerController : MonoBehaviour
 {
@@ -33,6 +34,9 @@ public class StM_PlayerController : MonoBehaviour
     [SerializeField] float _coyoteTime = 0.15f;
     [SerializeField] float _jumpBufferTime = 0.2f;
 
+    
+    public event UnityAction LeavingGround = delegate {  };
+    
     private Transform mainCam;
 
     private const float ZeroF = 0f;
@@ -51,6 +55,8 @@ public class StM_PlayerController : MonoBehaviour
     public CountdownTimer PlayerFallTimer { get { return _playerFallTimer; } }
     public CountdownTimer CoyoteTimeCounter { get { return _coyoteTimeCounter; } }
     public CountdownTimer JumpBufferTimeCounter { get { return _jumpBufferTimeCounter; } }
+    public StM_GroundCheck GroundCheck{ get { return _groundCheck; } }
+    public Rigidbody Rigidbody{ get { return _rigidbody; } }
     public float GravityFallMin { get { return _gravityFallMin; } }
     public float GravityFallMax { get { return _gravityFallMax; } }
     public float GravityFallIncrementAmount { get { return _gravityFallIncrementAmount; } }
@@ -68,12 +74,7 @@ public class StM_PlayerController : MonoBehaviour
     private void Awake()
     {
         mainCam = Camera.main.transform;
-        _freeLookCam.Follow = transform;
-        _freeLookCam.LookAt = transform;
         
-        //adjust position of camera if player is warped
-        _freeLookCam.OnTargetObjectWarped(transform, transform.position - _freeLookCam.transform.position - Vector3.forward);
-
         _rigidbody.freezeRotation = true;
         
         //Timers setup
@@ -107,6 +108,9 @@ public class StM_PlayerController : MonoBehaviour
         
         // Set Initial State
         _stateMachine.SetState(groundedState);
+        
+        //Set events
+        _groundCheck.LeavingGround += OnLeavingGround;
     }
 
     void At(IState from, IState to, IPredicate condition) => _stateMachine.AddTransition(from, to, condition);
@@ -150,6 +154,11 @@ public class StM_PlayerController : MonoBehaviour
         {
             timer.Tick(Time.deltaTime);
         }
+    }
+
+    private void OnLeavingGround()
+    {
+        LeavingGround.Invoke();
     }
     
     
