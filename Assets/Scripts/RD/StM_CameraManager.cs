@@ -83,19 +83,28 @@ public class StM_CameraManager : MonoBehaviour
             _cameraTargetY = _playerController.transform.position.y;
         }
 
-        _cameraTargetTransform.position = new Vector3(_playerController.transform.position.x, _cameraTargetY,
+        var targetPos = new Vector3(_playerController.transform.position.x, _cameraTargetY,
             _playerController.transform.position.z);
+
+        if (targetPos == _playerController.transform.position)
+        {
+            StartCoroutine(SmoothMovement(targetPos, _smoothTime));
+        }
+        else
+        {
+            _cameraTargetTransform.position = targetPos;
+        }
         
     }
 
-    private IEnumerator SmoothMovement(Vector3 targetPos)
+    private IEnumerator SmoothMovement(Vector3 targetPos, float smoothSpeed)
     {
         var basePos = _cameraTargetTransform.position;
         var interpolation = 0f;
         while (interpolation < 1f)
         {
             _cameraTargetTransform.position = Vector3.Lerp(basePos, targetPos, interpolation);
-            interpolation += Time.deltaTime * _smoothTime;
+            interpolation += Time.deltaTime * smoothSpeed;
             yield return new WaitForEndOfFrame();
         }
     }
