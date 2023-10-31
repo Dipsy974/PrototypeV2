@@ -5,6 +5,7 @@ using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class StM_PlayerController : MonoBehaviour
 {
@@ -13,9 +14,12 @@ public class StM_PlayerController : MonoBehaviour
     [SerializeField] private StM_GroundCheck _groundCheck;
     [SerializeField] private CinemachineFreeLook _freeLookCam;
     [SerializeField] private StM_InputReader _input;
-
+    
     [Header("Movement Parameters")] 
-    [SerializeField] private float _moveSpeed = 6f;
+    [SerializeField] private float _maxMoveSpeed = 6f;
+    [SerializeField] private float _baseMoveSpeed = 3f;
+    [SerializeField] private float _speedIncrement = 0.5f;
+    [SerializeField] private float _currentMoveSpeed = 0f;
     [SerializeField] private float _rotationSpeed = 15f;
     private Vector3 _playerMoveInput, _appliedMovement, _cameraRelativeMovement ;
     
@@ -36,11 +40,12 @@ public class StM_PlayerController : MonoBehaviour
 
     
     public event UnityAction LeavingGround = delegate {  };
+    public event UnityAction EnteringGround = delegate {  };
     
     private Transform mainCam;
 
     private const float ZeroF = 0f;
-    private float _currentSpeed, _velocity, _jumpVelocity;
+    private float _velocity, _jumpVelocity;
 
     private Vector3 _movement;
 
@@ -111,6 +116,7 @@ public class StM_PlayerController : MonoBehaviour
         
         //Set events
         _groundCheck.LeavingGround += OnLeavingGround;
+        _groundCheck.EnteringGround += OnEnteringGround;
     }
 
     void At(IState from, IState to, IPredicate condition) => _stateMachine.AddTransition(from, to, condition);
@@ -160,6 +166,10 @@ public class StM_PlayerController : MonoBehaviour
     {
         LeavingGround.Invoke();
     }
+    private void OnEnteringGround()
+    {
+        EnteringGround.Invoke();
+    }
     
     
     private Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
@@ -185,9 +195,21 @@ public class StM_PlayerController : MonoBehaviour
     
     public void PlayerMove()
     {
-        Vector3 calculatedPlayerMovement = (new Vector3(_playerMoveInput.x * _moveSpeed *_rigidbody.mass,
+        if (_input.Direction.magnitude > ZeroF )
+        {
+            if (_currentMoveSpeed < _maxMoveSpeed)
+            {
+                _currentMoveSpeed += _speedIncrement;
+            }
+        }
+        else
+        {
+            _currentMoveSpeed = _baseMoveSpeed;
+        }
+        
+        Vector3 calculatedPlayerMovement = (new Vector3(_playerMoveInput.x * _currentMoveSpeed * _rigidbody.mass,
             _playerMoveInput.y * _rigidbody.mass,
-            _playerMoveInput.z * _moveSpeed * _rigidbody.mass));
+            _playerMoveInput.z * _currentMoveSpeed * _rigidbody.mass));
         
         _appliedMovement = calculatedPlayerMovement;
     }

@@ -12,6 +12,7 @@ public class StM_CameraManager : MonoBehaviour
     [SerializeField] private CinemachineFreeLook _freeLookCam;
     [SerializeField] private StM_PlayerController _playerController;
     [SerializeField] private Transform _cameraTargetTransform;
+    [SerializeField] private Transform _cameraTargetParentTransform;
     [SerializeField] private float _smoothTime;
     [SerializeField] private float _followSpeed;
     
@@ -22,10 +23,14 @@ public class StM_CameraManager : MonoBehaviour
     private float _cameraTargetY;
     private Camera _mainCam;
     private Vector3 _velocityRef;
+    private bool _following;
+    
     private void Awake()
     {
+        _following = true;
         _mainCam = Camera.main;
         _playerController.LeavingGround += OnLeavingGround;
+        _playerController.EnteringGround += OnEnteringGround;
     }
 
     private void OnEnable()
@@ -67,43 +72,50 @@ public class StM_CameraManager : MonoBehaviour
 
     public void OnLeavingGround()
     {
-        _cameraTargetY = _playerController.transform.position.y;
+        _following = false;
     }
+    public void OnEnteringGround()
+    {
+        var targetY = _playerController.transform.position.y;
+        StartCoroutine(SmoothYMovement(targetY, _smoothTime));
+        _following = true;
+    }
+    
 
     private void LateUpdate()
     {
-        Vector3 viewPos = _mainCam.WorldToViewportPoint(_playerController.transform.position + _playerController.Rigidbody.velocity * Time.deltaTime);
         
-        if (viewPos.y > 0.85f || viewPos.y < 0.1f)
+        // Vector3 viewPos = _mainCam.WorldToViewportPoint(_playerController.transform.position + _playerController.Rigidbody.velocity * Time.deltaTime);
+        // if (viewPos.y > 0.98f )
+        // {
+        //     _following = true;
+        // }
+        
+        
+        if (_following)
         {
-            _cameraTargetY = _playerController.transform.position.y;
-        }
-        else if(_playerController.GroundCheck.IsGrounded)
-        {
-            _cameraTargetY = _playerController.transform.position.y;
-        }
-
-        var targetPos = new Vector3(_playerController.transform.position.x, _cameraTargetY,
-            _playerController.transform.position.z);
-
-        if (targetPos == _playerController.transform.position)
-        {
-            StartCoroutine(SmoothMovement(targetPos, _smoothTime));
+            if(_cameraTargetTransform.position != _playerController.transform.position) _cameraTargetTransform.position = _playerController.transform.position;
+            if (_cameraTargetTransform.parent != _playerController.transform)
+            {
+                _cameraTargetTransform.parent = _playerController.transform;
+                _cameraTargetTransform.rotation = _playerController.transform.rotation;
+            }
         }
         else
         {
-            _cameraTargetTransform.position = targetPos;
+            if (_cameraTargetTransform.parent != _cameraTargetParentTransform.transform)_cameraTargetTransform.parent = _cameraTargetParentTransform.transform;
+            _cameraTargetTransform.position = new Vector3(_playerController.transform.position.x, _cameraTargetTransform.position.y,_playerController.transform.position.z);
         }
         
     }
 
-    private IEnumerator SmoothMovement(Vector3 targetPos, float smoothSpeed)
+    private IEnumerator SmoothYMovement(float targetY,float smoothSpeed)
     {
         var basePos = _cameraTargetTransform.position;
         var interpolation = 0f;
-        while (interpolation < 1f)
+        while (interpolation < 0.95f)
         {
-            _cameraTargetTransform.position = Vector3.Lerp(basePos, targetPos, interpolation);
+            _cameraTargetTransform.position = new Vector3(_playerController.transform.position.x, Mathf.Lerp(basePos.y, targetY, interpolation), _playerController.transform.position.z);
             interpolation += Time.deltaTime * smoothSpeed;
             yield return new WaitForEndOfFrame();
         }

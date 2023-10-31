@@ -10,6 +10,7 @@ public class StM_GroundCheck : MonoBehaviour
     [SerializeField] private LayerMask _groundLayers;
 
     public event UnityAction LeavingGround = delegate {  };
+    public event UnityAction EnteringGround = delegate {  };
     
     private bool previousState;
     public bool IsGrounded { get; private set; }
@@ -20,6 +21,10 @@ public class StM_GroundCheck : MonoBehaviour
         if (IsGrounded == false && IsGrounded != previousState)
         {
             LeavingGround.Invoke();
+        }
+        else if (IsGrounded == true && IsGrounded != previousState)
+        {
+            EnteringGround.Invoke();
         }
     }
 
