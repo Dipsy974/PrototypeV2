@@ -6,20 +6,21 @@ using UnityEngine.Events;
 
 public class JumpState : BaseState
 {
-    public JumpState(StM_PlayerController player, StM_InputReader input) : base(player, input) { }
+    public JumpState(StM_PlayerController player, CharacterControlsInput input) : base(player, input) { }
 
+    private bool _initialJump;
+
+    
     public override void OnEnter()
     {
-        _input.Jump += OnJump;
         
-        _playerController.CoyoteTimeCounter.Stop();
-        InitialJump();
     }
-
+    
     public override void FixedUpdate()
     {
         _playerController.HandleRotation();
         HandleJump();
+        OnJump();
         _playerController.PlayerMove();
     }
     
@@ -27,8 +28,6 @@ public class JumpState : BaseState
     {
         _playerController.PlayerFallTimer.Start();
         _playerController.CoyoteTimeCounter.Stop();
-        
-        _input.Jump -= OnJump;
     }
     
     private void InitialJump()
@@ -38,13 +37,22 @@ public class JumpState : BaseState
     
     private void HandleJump()
     {
-        var calculatedJumpInput = _playerController.InitialJumpForce * _playerController.ContinualJumpForceMultiplier;
+        var calculatedJumpInput = _playerController.PlayerMoveInputY;
+        if (_initialJump)
+        {
+            calculatedJumpInput = _playerController.InitialJumpForce;
+            _initialJump = false;
+        }
+        else
+        {
+            calculatedJumpInput = _playerController.InitialJumpForce * _playerController.ContinualJumpForceMultiplier;
+        }
         _playerController.PlayerMoveInputY =  calculatedJumpInput; 
     }
     
-    void OnJump(bool performed)
+    void OnJump()
     {
-        if (!performed)
+        if (!_input.JumpIsPressed)
         {
             _playerController.JumpTimer.Stop();
         }

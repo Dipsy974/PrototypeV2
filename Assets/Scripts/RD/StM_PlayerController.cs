@@ -13,7 +13,7 @@ public class StM_PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private StM_GroundCheck _groundCheck;
     [SerializeField] private CinemachineFreeLook _freeLookCam;
-    [SerializeField] private StM_InputReader _input;
+    [SerializeField] private CharacterControlsInput _input;
     
     [Header("Movement Parameters")] 
     [SerializeField] private float _maxMoveSpeed = 6f;
@@ -46,6 +46,7 @@ public class StM_PlayerController : MonoBehaviour
 
     private const float ZeroF = 0f;
     private float _velocity, _jumpVelocity;
+    private bool _initialJump, _jumpWasPressedLastFrame;
 
     private Vector3 _movement;
 
@@ -69,11 +70,14 @@ public class StM_PlayerController : MonoBehaviour
     public float PlayerFallTimeMax { get { return _playerFallTimeMax; } }
     
     
+    
     //GETTERS + SETTERS
     public float PlayerMoveInputY { get { return _playerMoveInput.y; } set { _playerMoveInput.y = value; } }
     public float InitialJumpForce { get { return _initialJumpForce; }set { _initialJumpForce = value; } }
     public float ContinualJumpForceMultiplier { get { return _continualJumpForceMultiplier; }set { _continualJumpForceMultiplier = value; } }
     public float GravityFallCurrent { get { return _gravityFallCurrent; }set { _gravityFallCurrent = value; } }
+    public bool InitialJump { get { return _initialJump;} set { _initialJump = value; } }
+    public bool JumpWasPressedLastFrame { get { return _jumpWasPressedLastFrame;} set { _jumpWasPressedLastFrame = value; } }
 
 
     private void Awake()
@@ -124,7 +128,7 @@ public class StM_PlayerController : MonoBehaviour
 
     private void Start()
     {
-        _input.EnablePlayerActions();
+
     }
 
     private void OnEnable()
@@ -145,7 +149,7 @@ public class StM_PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _playerMoveInput = new Vector3(_input.Direction.x, 0f, _input.Direction.y);
+        _playerMoveInput = new Vector3(_input.MoveInput.x, 0f, _input.MoveInput.y);
  
         _stateMachine.FixedUpdate();
 
@@ -195,7 +199,7 @@ public class StM_PlayerController : MonoBehaviour
     
     public void PlayerMove()
     {
-        if (_input.Direction.magnitude > ZeroF )
+        if (_input.MoveInput.magnitude > ZeroF )
         {
             if (_currentMoveSpeed < _maxMoveSpeed)
             {
@@ -223,7 +227,7 @@ public class StM_PlayerController : MonoBehaviour
         positionToLookAt.z = _cameraRelativeMovement.z;
 
         Quaternion currentRotation = transform.rotation;
-        if (_input.Direction.magnitude > ZeroF && positionToLookAt != Vector3.zero)
+        if (_input.MoveInput.magnitude > ZeroF && positionToLookAt != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, _rotationSpeed * Time.deltaTime);
