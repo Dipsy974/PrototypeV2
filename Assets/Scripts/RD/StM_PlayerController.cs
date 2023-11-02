@@ -14,8 +14,9 @@ public class StM_PlayerController : MonoBehaviour
     [SerializeField] private StM_GroundCheck _groundCheck;
     [SerializeField] private CinemachineFreeLook _freeLookCam;
     [SerializeField] private CharacterControlsInput _input;
-    
+
     [Header("Movement Parameters")] 
+    [SerializeField] private bool _movementBasedOnCamera;
     [SerializeField] private float _maxMoveSpeed = 6f;
     [SerializeField] private float _baseMoveSpeed = 3f;
     [SerializeField] private float _speedIncrement = 0.5f;

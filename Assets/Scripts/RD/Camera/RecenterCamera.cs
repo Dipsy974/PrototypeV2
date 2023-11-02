@@ -26,8 +26,10 @@ public class RecenterCamera : MonoBehaviour
     {
         _isRecentering = true;
         _camera.m_RecenterToTargetHeading.m_enabled = true;
+        _camera.m_YAxisRecentering.m_enabled = true;
         yield return new WaitForSeconds(_camera.m_RecenterToTargetHeading.m_RecenteringTime * 2f);
         _camera.m_RecenterToTargetHeading.m_enabled = false;
+        _camera.m_YAxisRecentering.m_enabled = false;
         _isRecentering = false;
     }
 }
