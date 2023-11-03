@@ -230,7 +230,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 75754903}
-  m_LocalRotation: {x: 0.112676725, y: -0.000000017096806, z: 0.0000000019387585,
+  m_LocalRotation: {x: 0.112676725, y: 0.000000017096806, z: -0.0000000019387585,
     w: 0.9936317}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -1126,7 +1126,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1111839063}
-  m_LocalRotation: {x: 0.095065154, y: -0.0000000042821133, z: 4.0893178e-10, w: 0.99547106}
+  m_LocalRotation: {x: 0.095065154, y: 0.0000000042821133, z: -4.0893178e-10, w: 0.99547106}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2237,7 +2237,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493619473}
-  m_LocalRotation: {x: 0.09506516, y: -0.0000000042821138, z: 4.0893186e-10, w: 0.99547106}
+  m_LocalRotation: {x: 0.09506516, y: 0.0000000042821138, z: -4.0893186e-10, w: 0.99547106}
   m_LocalPosition: {x: -25.131329, y: 51.02563, z: -54.96241}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3308,8 +3308,8 @@ MonoBehaviour:
   _gravityFallIncrementAmount: -20
   _gravityFallIncrementTime: 0.05
   _playerFallTimeMax: 0.3
-  _initialJumpForce: 4000
-  _continualJumpForceMultiplier: 0.05
+  _initialJumpForce: 10000
+  _continualJumpForceMultiplier: 0.01
   _jumpTime: 0.3
   _coyoteTime: 0.15
   _jumpBufferTime: 0.3

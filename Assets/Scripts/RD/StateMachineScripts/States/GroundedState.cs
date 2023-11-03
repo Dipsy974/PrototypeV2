@@ -8,7 +8,7 @@ public class GroundedState : BaseState
 
     public override void OnEnter()
     {
-
+        _playerController.InitialJump = false;
         _playerController.CoyoteTimeCounter.Stop();
         _playerController.JumpTimer.Reset();
     }

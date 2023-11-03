@@ -28,20 +28,16 @@ public class JumpState : BaseState
     {
         _playerController.PlayerFallTimer.Start();
         _playerController.CoyoteTimeCounter.Stop();
-    }
-    
-    private void InitialJump()
-    {
-        _playerController.PlayerMoveInputY = _playerController.InitialJumpForce;
+        _playerController.InitialJump = false;
     }
     
     private void HandleJump()
     {
         var calculatedJumpInput = _playerController.PlayerMoveInputY;
-        if (_initialJump)
+        if (!_playerController.InitialJump)
         {
             calculatedJumpInput = _playerController.InitialJumpForce;
-            _initialJump = false;
+            _playerController.InitialJump = true;
         }
         else
         {
