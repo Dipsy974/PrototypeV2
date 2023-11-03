@@ -34,6 +34,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Default_Particle:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTexture:
         m_Texture: {fileID: 2800000, guid: e5413d7118495d34badc7a8a019b6ad4, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -77,8 +81,9 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RippleSmoothing: 0.3
-    - _RippleSpeed: 0.4
+    - _RippleSpeed: 1.2
     - _RippleStart: 0.7384393
+    - _ShapeNoseScale: 12
     - _SmudgeStrenght: 0.1
     - _Strenght: 0.4
     m_Colors:
