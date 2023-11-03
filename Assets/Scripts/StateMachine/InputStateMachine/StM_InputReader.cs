@@ -11,8 +11,6 @@ public class StM_InputReader : ScriptableObject, PlayerInputActions.ICharacterCo
 {
     public event UnityAction<Vector2> Move = delegate {  };
     public event UnityAction<Vector2, bool> Look = delegate {  }; 
-    public event UnityAction EnableMouseControlCamera = delegate {  };
-    public event UnityAction DisableMouseControlCamera = delegate {  };
     public event UnityAction<bool> Jump = delegate {  };
     
 
@@ -45,19 +43,7 @@ public class StM_InputReader : ScriptableObject, PlayerInputActions.ICharacterCo
     }
 
     private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
-
-    public void OnMouseControlCamera(InputAction.CallbackContext context)
-    {
-        switch (context.phase)
-        {
-            case InputActionPhase.Started:
-                EnableMouseControlCamera.Invoke();
-                break;
-            case InputActionPhase.Canceled:
-                DisableMouseControlCamera.Invoke();
-                break;
-        }
-    }
+    
 
     public void OnJump(InputAction.CallbackContext context)
     {

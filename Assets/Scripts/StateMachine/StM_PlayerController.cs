@@ -16,14 +16,22 @@ public class StM_PlayerController : MonoBehaviour
     [Header("Movement Parameters")] 
     [SerializeField] private float _moveSpeed = 6f;
     [SerializeField] private float _rotationSpeed = 15f;
-    [SerializeField] private float _smoothTime = 0.1f;
+    private Vector3 _playerMoveInput, _appliedMovement, _cameraRelativeMovement ;
     
+    [Header("Gravity")]
+    [SerializeField] private float _gravityFallCurrent = -100.0f;
+    [SerializeField] private float _gravityFallMin = -100.0f;
+    [SerializeField] private float _gravityFallMax = -500.0f;
+    [SerializeField] [Range(-5f, -35f)] private float _gravityFallIncrementAmount = -20.0f;
+    [SerializeField] private float _gravityFallIncrementTime = 0.05f;
+    [SerializeField] private float _playerFallTimeMax = 0.3f;
+
     [Header("Jump Parameters")] 
-    [SerializeField] private float _jumpForce = 10f;
-    [SerializeField] private float _jumpDuration = 0.5f;
-    [SerializeField] private float _jumpCooldown = 0f;
-    [SerializeField] private float _jumpMaxHeight = 2f;
-    [SerializeField] private float _gravityMultiplier = 3f;
+    [SerializeField] float _initialJumpForce = 750.0f;
+    [SerializeField] float _continualJumpForceMultiplier = 0.1f;
+    [SerializeField] float _jumpTime = 0.175f;
+    [SerializeField] float _coyoteTime = 0.15f;
+    [SerializeField] float _jumpBufferTime = 0.2f;
 
     private Transform mainCam;
 
@@ -34,7 +42,28 @@ public class StM_PlayerController : MonoBehaviour
 
     private List<Timer> _timers;
     private CountdownTimer _jumpTimer;
-    private CountdownTimer _jumpCooldownTimer;
+    private CountdownTimer _playerFallTimer , _coyoteTimeCounter, _jumpBufferTimeCounter;
+
+    private StateMachine _stateMachine;
+    
+    //SIMPLE GETTERS
+    public CountdownTimer JumpTimer { get { return _jumpTimer; } }
+    public CountdownTimer PlayerFallTimer { get { return _playerFallTimer; } }
+    public CountdownTimer CoyoteTimeCounter { get { return _coyoteTimeCounter; } }
+    public CountdownTimer JumpBufferTimeCounter { get { return _jumpBufferTimeCounter; } }
+    public float GravityFallMin { get { return _gravityFallMin; } }
+    public float GravityFallMax { get { return _gravityFallMax; } }
+    public float GravityFallIncrementAmount { get { return _gravityFallIncrementAmount; } }
+    public float GravityFallIncrementTime { get { return _gravityFallIncrementTime; } }
+    public float PlayerFallTimeMax { get { return _playerFallTimeMax; } }
+    
+    
+    //GETTERS + SETTERS
+    public float PlayerMoveInputY { get { return _playerMoveInput.y; } set { _playerMoveInput.y = value; } }
+    public float InitialJumpForce { get { return _initialJumpForce; }set { _initialJumpForce = value; } }
+    public float ContinualJumpForceMultiplier { get { return _continualJumpForceMultiplier; }set { _continualJumpForceMultiplier = value; } }
+    public float GravityFallCurrent { get { return _gravityFallCurrent; }set { _gravityFallCurrent = value; } }
+
 
     private void Awake()
     {
@@ -48,12 +77,40 @@ public class StM_PlayerController : MonoBehaviour
         _rigidbody.freezeRotation = true;
         
         //Timers setup
-        _jumpTimer = new CountdownTimer(_jumpDuration);
-        _jumpCooldownTimer = new CountdownTimer(_jumpCooldown);
-        _timers = new List<Timer> { _jumpTimer, _jumpCooldownTimer };
+        _jumpTimer = new CountdownTimer(_jumpTime);
 
-        _jumpTimer.OnTimerStop += () => _jumpCooldownTimer.Start();
+        _playerFallTimer = new CountdownTimer(_playerFallTimeMax);
+        _coyoteTimeCounter = new CountdownTimer(_coyoteTime);
+        _jumpBufferTimeCounter = new CountdownTimer(_jumpBufferTime);
+        
+        _timers = new List<Timer> { _jumpTimer, _playerFallTimer, _coyoteTimeCounter, _jumpBufferTimeCounter };
+        
+        //_jumpTimer.OnTimerStop += () => ;
+        
+        // State Machine creation
+        _stateMachine = new StateMachine();
+        
+        // States creation
+        var groundedState = new GroundedState(this, _input);
+        var jumpState = new JumpState(this, _input);
+        var fallState = new FallState(this, _input);
+        
+        // Transitions creation
+        At(groundedState, jumpState, new FuncPredicate(()=> _jumpTimer.IsRunning));
+        At(groundedState, fallState, new FuncPredicate(()=> !_jumpTimer.IsRunning && !_groundCheck.IsGrounded));
+        
+        At(jumpState, fallState, new FuncPredicate(()=> !_jumpTimer.IsRunning));
+        
+        At(fallState, groundedState, new FuncPredicate(()=> _groundCheck.IsGrounded));
+        At(fallState, jumpState, new FuncPredicate(()=> _jumpTimer.IsRunning));
+        
+        
+        // Set Initial State
+        _stateMachine.SetState(groundedState);
     }
+
+    void At(IState from, IState to, IPredicate condition) => _stateMachine.AddTransition(from, to, condition);
+    void Any(IState to, IPredicate condition) => _stateMachine.AddAnyTransition(to, condition);
 
     private void Start()
     {
@@ -69,31 +126,22 @@ public class StM_PlayerController : MonoBehaviour
     {
         _input.Jump += OnJump;
     }
-
-    void OnJump(bool performed)
-    {
-        if (performed && !_jumpTimer.IsRunning && !_jumpCooldownTimer.IsRunning && _groundCheck.IsGrounded)
-        {
-            _jumpTimer.Start();
-        }
-        else if (!performed && _jumpTimer.IsRunning)
-        {
-            _jumpTimer.Stop();
-        }
-        
-    }
     
     private void Update()
     {
-        _movement = new Vector3(_input.Direction.x, 0f, _input.Direction.y);
-
+        _stateMachine.Update();
         HandleTimers();
     }
 
     private void FixedUpdate()
     {
-        HandleJump();
-        HandleMovement();
+        _playerMoveInput = new Vector3(_input.Direction.x, 0f, _input.Direction.y);
+ 
+        _stateMachine.FixedUpdate();
+
+        _cameraRelativeMovement = ConvertToCameraSpace(_appliedMovement);
+        
+        _rigidbody.AddForce(_cameraRelativeMovement, ForceMode.Force);
     }
 
     private void HandleTimers()
@@ -103,66 +151,63 @@ public class StM_PlayerController : MonoBehaviour
             timer.Tick(Time.deltaTime);
         }
     }
-
-    private void HandleJump()
+    
+    void OnJump(bool performed)
     {
-        if (!_jumpTimer.IsRunning && _groundCheck.IsGrounded)
+        if (performed && !_jumpTimer.IsRunning && _groundCheck.IsGrounded)
         {
-            _jumpVelocity = ZeroF;
+            _jumpTimer.Start();
+        }
+        else if (!performed && _jumpTimer.IsRunning)
+        {
             _jumpTimer.Stop();
-            return;
-        }
-
-        if (_jumpTimer.IsRunning)
-        {
-            float launchPoint = 0.9f;
-            if (_jumpTimer.Progress > launchPoint)
-            {
-                _jumpVelocity = Mathf.Sqrt((2 * _jumpMaxHeight * Mathf.Abs(Physics.gravity.y)));
-            }
-            else
-            {
-                _jumpVelocity += Physics.gravity.y * _gravityMultiplier * Time.fixedDeltaTime;
-            }
-
-            _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, _jumpVelocity, _rigidbody.velocity.z);
         }
     }
-
-    private void HandleMovement()
+    
+    private Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
     {
+        float currentYValue = vectorToRotate.y;
+
+        Vector3 cameraForward = mainCam.forward;
+        Vector3 cameraRight = mainCam.right;
+
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+
+        cameraForward = cameraForward.normalized;
+        cameraRight = cameraRight.normalized;
+
+        Vector3 cameraForwardZProduct = vectorToRotate.z * cameraForward;
+        Vector3 cameraRightXProduct = vectorToRotate.x * cameraRight;
+
+        Vector3 vectorRotatedToCameraSpace = cameraForwardZProduct + cameraRightXProduct;
+        vectorRotatedToCameraSpace.y = currentYValue;
+        return vectorRotatedToCameraSpace;
+    }
+    
+    public void PlayerMove()
+    {
+        Vector3 calculatedPlayerMovement = (new Vector3(_playerMoveInput.x * _moveSpeed *_rigidbody.mass,
+            _playerMoveInput.y * _rigidbody.mass,
+            _playerMoveInput.z * _moveSpeed * _rigidbody.mass));
         
-        //Make movement match camera rotation
-        var adjustedDirection = Quaternion.AngleAxis(mainCam.eulerAngles.y, Vector3.up) * _movement;
-        if (adjustedDirection.magnitude > ZeroF)
+        _appliedMovement = calculatedPlayerMovement;
+    }
+    
+    public void HandleRotation()
+    {
+        Vector3 positionToLookAt;
+
+        positionToLookAt.x = _cameraRelativeMovement.x;
+        positionToLookAt.y = 0f;
+        positionToLookAt.z = _cameraRelativeMovement.z;
+
+        Quaternion currentRotation = transform.rotation;
+        if (_input.Direction.magnitude > ZeroF && positionToLookAt != Vector3.zero)
         {
-            HandleRotation(adjustedDirection);
-            HandleHorizontalMovement(adjustedDirection);
-            SmoothSpeed(adjustedDirection.magnitude);
+            Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
+            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, _rotationSpeed * Time.deltaTime);
         }
-        else
-        {
-            SmoothSpeed(ZeroF);
-            _rigidbody.velocity = new Vector3(ZeroF, _rigidbody.velocity.y, ZeroF);
-        }
-    }
 
-    private void HandleHorizontalMovement(Vector3 adjustedDirection)
-    {
-        //move
-        Vector3 velocity = adjustedDirection * (_moveSpeed * Time.fixedDeltaTime);
-        _rigidbody.velocity = new Vector3(velocity.x, _rigidbody.velocity.y, velocity.z);
-        
-    }
-
-    private void HandleRotation(Vector3 adjustedDirection)
-    {
-        var targetRotation = Quaternion.LookRotation(adjustedDirection);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-    }
-
-    private void SmoothSpeed(float value)
-    {
-        _currentSpeed = Mathf.SmoothDamp(_currentSpeed, value, ref _velocity, _smoothTime);
     }
 }

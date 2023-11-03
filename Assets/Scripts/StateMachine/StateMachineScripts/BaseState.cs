@@ -2,28 +2,30 @@
 {
 
     protected readonly StM_PlayerController _playerController;
+    protected readonly StM_InputReader _input;
 
-    protected BaseState(StM_PlayerController player)
+    protected BaseState(StM_PlayerController player, StM_InputReader input)
     {
         this._playerController = player;
+        this._input = input;
     }
     
-    public void OnEnter()
+    public virtual void OnEnter()
     {
         //noop
     }
 
-    public void Update()
+    public virtual void Update()
     {
         //noop
     }
 
-    public void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         //noop
     }
 
-    public void OnExit()
+    public virtual void OnExit()
     {
         //noop
     }

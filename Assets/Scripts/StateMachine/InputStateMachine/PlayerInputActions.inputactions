@@ -24,15 +24,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "MouseControlCamera",
-                    "type": "Button",
-                    "id": "b0485671-8ace-4a89-8e46-b8a326339661",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Jump",
                     "type": "Button",
                     "id": "fa7909a3-eade-408f-979a-da4b76ccfc0b",
@@ -128,17 +119,6 @@
                     "processors": "ScaleVector2(x=0.03,y=0.03)",
                     "groups": "KeyboardMouse",
                     "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0494c4e4-dbe9-4ed6-bee6-dcb5b601ab1b",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "MouseControlCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
