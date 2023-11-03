@@ -4,27 +4,21 @@ using UnityEngine;
 
 public class GroundedState : BaseState
 {
-    public GroundedState(StM_PlayerController player, StM_InputReader input) : base(player, input) { }
+    public GroundedState(StM_PlayerController player, CharacterControlsInput input) : base(player, input) { }
 
     public override void OnEnter()
-    { 
+    {
+        _playerController.InitialJump = false;
         _playerController.CoyoteTimeCounter.Stop();
-        //jump right when entering state in case of jump buffer
-        if (_playerController.JumpBufferTimeCounter.IsRunning)
-        {
-            _playerController.JumpBufferTimeCounter.Stop();
-            _playerController.JumpTimer.Start();
-        }
-        else
-        {
-            _playerController.JumpTimer.Reset();
-        }
+        _playerController.JumpTimer.Reset();
     }
 
     public override void FixedUpdate()
     {
+
         _playerController.HandleRotation();
         HandleGravity();
+        OnJump();
         _playerController.PlayerMove();
     }
     
@@ -40,5 +34,16 @@ public class GroundedState : BaseState
     public override void OnExit()
     {
         _playerController.CoyoteTimeCounter.Start();
+        
+    }
+    
+    void OnJump()
+    {
+        if (_input.JumpIsPressed && !_playerController.JumpWasPressedLastFrame || _playerController.JumpBufferTimeCounter.IsRunning)
+        {
+            _playerController.JumpTimer.Start();
+        }
+        
+        _playerController.JumpWasPressedLastFrame = _input.JumpIsPressed;
     }
 }
