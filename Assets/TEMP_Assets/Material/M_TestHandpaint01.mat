@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_ModularFlower_LuminescentFlower00
+  m_Name: M_TestHandpaint01
   m_Shader: {fileID: -6465566751694194690, guid: 861272e545a69234e9c4d413b38a566b,
     type: 3}
   m_ValidKeywords: []
@@ -39,7 +39,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: c841be8803c22a14daa4e0d62542d53a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4d64dbe76d89fbd48bcc4f23a095a961, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicMap:
@@ -47,7 +47,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: 0fc60753c998ad945b0b719a1777ec8e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 57e7762b2caa29e46b82542c5efce6bc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_6d859f020c564a7d9cfeab30443c4752_Texture_1:
