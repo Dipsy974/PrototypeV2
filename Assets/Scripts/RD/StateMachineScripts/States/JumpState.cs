@@ -15,12 +15,16 @@ public class JumpState : BaseState
     {
         
     }
+
+    public override void Update()
+    {
+        OnJump();
+    }
     
     public override void FixedUpdate()
     {
         _playerController.HandleRotation();
         HandleJump();
-        OnJump();
         _playerController.PlayerMove();
     }
     

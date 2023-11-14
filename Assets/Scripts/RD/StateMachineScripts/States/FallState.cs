@@ -11,11 +11,16 @@ public class FallState : BaseState
 
     }
     
+    public override void Update()
+    {
+        OnJump();
+    }
+
+    
     public override void FixedUpdate()
     {
         _playerController.HandleRotation();
         HandleFallGravity();
-        OnJump();
         _playerController.PlayerMove();
     }
 

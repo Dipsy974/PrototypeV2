@@ -12,13 +12,18 @@ public class GroundedState : BaseState
         _playerController.CoyoteTimeCounter.Stop();
         _playerController.JumpTimer.Reset();
     }
+    
+    public override void Update()
+    {
+        OnJump();
+    }
+
 
     public override void FixedUpdate()
     {
 
         _playerController.HandleRotation();
         HandleGravity();
-        OnJump();
         _playerController.PlayerMove();
     }
     
