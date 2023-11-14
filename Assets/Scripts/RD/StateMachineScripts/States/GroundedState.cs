@@ -21,7 +21,6 @@ public class GroundedState : BaseState
 
     public override void FixedUpdate()
     {
-
         _playerController.HandleRotation();
         HandleGravity();
         _playerController.PlayerMove();
