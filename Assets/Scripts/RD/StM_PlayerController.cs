@@ -13,7 +13,7 @@ public class StM_PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private StM_GroundCheck _groundCheck;
     [SerializeField] private CinemachineFreeLook _freeLookCam;
-    [SerializeField] private CharacterControlsInput _input;
+    [SerializeField] private StM_InputReader _input;
 
     [Header("Movement Parameters")] 
     [SerializeField] private bool _movementBasedOnCamera;
@@ -36,6 +36,7 @@ public class StM_PlayerController : MonoBehaviour
     [SerializeField] float _initialJumpForce = 750.0f;
     [SerializeField] float _continualJumpForceMultiplier = 0.1f;
     [SerializeField] float _jumpTime = 0.175f;
+    [SerializeField] float _jumpTimeMin = 0.175f;
     [SerializeField] float _coyoteTime = 0.15f;
     [SerializeField] float _jumpBufferTime = 0.2f;
 
@@ -52,13 +53,14 @@ public class StM_PlayerController : MonoBehaviour
     private Vector3 _movement;
 
     private List<Timer> _timers;
-    private CountdownTimer _jumpTimer;
+    private CountdownTimer _jumpTimer, _jumpMinTimer;
     private CountdownTimer _playerFallTimer , _coyoteTimeCounter, _jumpBufferTimeCounter;
 
     private StateMachine _stateMachine;
     
     //SIMPLE GETTERS
     public CountdownTimer JumpTimer { get { return _jumpTimer; } }
+    public CountdownTimer JumpMinTimer { get { return _jumpMinTimer; } }
     public CountdownTimer PlayerFallTimer { get { return _playerFallTimer; } }
     public CountdownTimer CoyoteTimeCounter { get { return _coyoteTimeCounter; } }
     public CountdownTimer JumpBufferTimeCounter { get { return _jumpBufferTimeCounter; } }
@@ -89,12 +91,12 @@ public class StM_PlayerController : MonoBehaviour
         
         //Timers setup
         _jumpTimer = new CountdownTimer(_jumpTime);
-
+        _jumpMinTimer = new CountdownTimer(_jumpTimeMin);
         _playerFallTimer = new CountdownTimer(_playerFallTimeMax);
         _coyoteTimeCounter = new CountdownTimer(_coyoteTime);
         _jumpBufferTimeCounter = new CountdownTimer(_jumpBufferTime);
         
-        _timers = new List<Timer> { _jumpTimer, _playerFallTimer, _coyoteTimeCounter, _jumpBufferTimeCounter };
+        _timers = new List<Timer> { _jumpTimer, _playerFallTimer, _coyoteTimeCounter, _jumpBufferTimeCounter, _jumpMinTimer };
         
         //_jumpTimer.OnTimerStop += () => ;
         
@@ -134,7 +136,7 @@ public class StM_PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        
+        _input.Move += OnMove;
     }
 
     private void OnDisable()
@@ -148,10 +150,14 @@ public class StM_PlayerController : MonoBehaviour
         HandleTimers();
     }
 
+    private void OnMove(Vector2 input)
+    {
+        _playerMoveInput = new Vector3(input.x, 0f, input.y);
+    }
+
     private void FixedUpdate()
     {
-        _playerMoveInput = new Vector3(_input.MoveInput.x, 0f, _input.MoveInput.y);
- 
+        
         _stateMachine.FixedUpdate();
 
         _cameraRelativeMovement = ConvertToCameraSpace(_appliedMovement);
@@ -200,7 +206,7 @@ public class StM_PlayerController : MonoBehaviour
     
     public void PlayerMove()
     {
-        if (_input.MoveInput.magnitude > ZeroF )
+        if (_playerMoveInput.magnitude > ZeroF )
         {
             if (_currentMoveSpeed < _maxMoveSpeed)
             {
@@ -228,7 +234,7 @@ public class StM_PlayerController : MonoBehaviour
         positionToLookAt.z = _cameraRelativeMovement.z;
 
         Quaternion currentRotation = transform.rotation;
-        if (_input.MoveInput.magnitude > ZeroF && positionToLookAt != Vector3.zero)
+        if (_playerMoveInput.magnitude > ZeroF && positionToLookAt != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, _rotationSpeed * Time.deltaTime);

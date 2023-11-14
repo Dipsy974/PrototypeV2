@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class GroundedState : BaseState
 {
-    public GroundedState(StM_PlayerController player, CharacterControlsInput input) : base(player, input) { }
+    public GroundedState(StM_PlayerController player, StM_InputReader input) : base(player, input)
+    {
+        input.Jump += OnJump;
+    }
 
     public override void OnEnter()
     {
@@ -13,11 +16,6 @@ public class GroundedState : BaseState
         _playerController.JumpTimer.Reset();
     }
     
-    public override void Update()
-    {
-        OnJump();
-    }
-
 
     public override void FixedUpdate()
     {
@@ -41,13 +39,13 @@ public class GroundedState : BaseState
         
     }
     
-    void OnJump()
+    void OnJump(bool jumpisPressed)
     {
-        if (_input.JumpIsPressed && !_playerController.JumpWasPressedLastFrame || _playerController.JumpBufferTimeCounter.IsRunning)
+        if (jumpisPressed && !_playerController.JumpWasPressedLastFrame || _playerController.JumpBufferTimeCounter.IsRunning)
         {
             _playerController.JumpTimer.Start();
         }
         
-        _playerController.JumpWasPressedLastFrame = _input.JumpIsPressed;
+        _playerController.JumpWasPressedLastFrame = jumpisPressed;
     }
 }

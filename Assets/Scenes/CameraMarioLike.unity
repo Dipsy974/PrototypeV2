@@ -230,7 +230,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 75754903}
-  m_LocalRotation: {x: 0.112676725, y: -0.000000017096806, z: 0.0000000019387585,
+  m_LocalRotation: {x: 0.112676725, y: 0.000000017096806, z: -0.0000000019387585,
     w: 0.9936317}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -3622,7 +3622,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1111839063}
-  m_LocalRotation: {x: 0.095065154, y: 0.0000000042821133, z: -4.0893178e-10, w: 0.99547106}
+  m_LocalRotation: {x: 0.095065154, y: -0.0000000042821133, z: 4.0893178e-10, w: 0.99547106}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5061,7 +5061,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493619473}
-  m_LocalRotation: {x: 0.09506516, y: 0.0000000042821138, z: -4.0893186e-10, w: 0.99547106}
+  m_LocalRotation: {x: 0.09506516, y: -0.0000000042821138, z: 4.0893186e-10, w: 0.99547106}
   m_LocalPosition: {x: -25.131329, y: 51.02563, z: -54.96241}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10815,7 +10815,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 2066905734}
   _groundCheck: {fileID: 2066905733}
   _freeLookCam: {fileID: 1612746432}
-  _input: {fileID: 1235883463}
+  _input: {fileID: 11400000, guid: 39aa687447067fb429b285afe1ee1d15, type: 2}
   _movementBasedOnCamera: 0
   _maxMoveSpeed: 100
   _baseMoveSpeed: 50
@@ -10830,7 +10830,8 @@ MonoBehaviour:
   _playerFallTimeMax: 0.3
   _initialJumpForce: 1500
   _continualJumpForceMultiplier: 0.1
-  _jumpTime: 0.3
+  _jumpTime: 3
+  _jumpTimeMin: 0.5
   _coyoteTime: 0.15
   _jumpBufferTime: 0.3
 --- !u!4 &2066905730

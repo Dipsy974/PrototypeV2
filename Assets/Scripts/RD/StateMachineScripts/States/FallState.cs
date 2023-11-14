@@ -3,19 +3,16 @@ using UnityEngine.Events;
 
 public class FallState : BaseState
 {
-    public FallState(StM_PlayerController player, CharacterControlsInput input) : base(player, input) {}
+    public FallState(StM_PlayerController player, StM_InputReader input) : base(player, input)
+    {
+        input.Jump += OnJump;
+    }
 
 
     public override void OnEnter()
     {
 
     }
-    
-    public override void Update()
-    {
-        OnJump();
-    }
-
     
     public override void FixedUpdate()
     {
@@ -49,16 +46,16 @@ public class FallState : BaseState
         _playerController.PlayerMoveInputY = _playerController.GravityFallCurrent;
     }
     
-    void OnJump()
+    void OnJump(bool jumpisPressed)
     {
-        if (_input.JumpIsPressed && _playerController.CoyoteTimeCounter.IsRunning)
-        {
+        if (jumpisPressed && _playerController.CoyoteTimeCounter.IsRunning)
+        { ;
             _playerController.JumpTimer.Start();
         }
-        if (_input.JumpIsPressed && !_playerController.JumpBufferTimeCounter.IsRunning && !_playerController.JumpWasPressedLastFrame)
+        if (jumpisPressed && !_playerController.JumpBufferTimeCounter.IsRunning && !_playerController.JumpWasPressedLastFrame)
         {
             _playerController.JumpBufferTimeCounter.Start();
         }
-        _playerController.JumpWasPressedLastFrame = _input.JumpIsPressed;
+        _playerController.JumpWasPressedLastFrame = jumpisPressed;
     }
 }

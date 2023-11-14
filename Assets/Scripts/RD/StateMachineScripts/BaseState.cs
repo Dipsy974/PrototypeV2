@@ -2,9 +2,9 @@
 {
 
     protected readonly StM_PlayerController _playerController;
-    protected readonly CharacterControlsInput _input;
+    protected readonly StM_InputReader _input;
 
-    protected BaseState(StM_PlayerController player, CharacterControlsInput input)
+    protected BaseState(StM_PlayerController player, StM_InputReader input)
     {
         this._playerController = player;
         this._input = input;
