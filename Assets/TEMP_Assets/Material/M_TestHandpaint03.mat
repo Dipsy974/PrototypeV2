@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_ModularFlower_WhiteFlower00
+  m_Name: M_TestHandpaint03
   m_Shader: {fileID: -6465566751694194690, guid: 861272e545a69234e9c4d413b38a566b,
     type: 3}
   m_ValidKeywords: []
@@ -39,15 +39,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: a0f0d4f00fd57b84994c1e37c7bf10ea, type: 3}
+        m_Texture: {fileID: 2800000, guid: b709c2801eca1524da3c91192482f6c4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicMap:
-        m_Texture: {fileID: 2800000, guid: f11125811cc2a8e429fe9f3b39f5d20c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2bf0ce459d4309549bc0533041aa8644, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: 743ed362915b9b645b207419652d0c4a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 02cd0786f3cf6664a9258fa85353b0a4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_6d859f020c564a7d9cfeab30443c4752_Texture_1:
@@ -76,7 +76,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Blend: 1
+    - _Blend: 0
     - _HatchingSpeed: 2.5
     - _NormalStrength: 0.416
     - _QueueControl: 0
