@@ -14,7 +14,7 @@ public class InteractorScript : MonoBehaviour
 
     private void Start()
     {
-        maxRadius = Random.Range(0f, 5f); 
+        maxRadius = Random.Range(3f, 5f); 
     }
 
     // Update is called once per frame
