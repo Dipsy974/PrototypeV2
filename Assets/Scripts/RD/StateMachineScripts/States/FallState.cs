@@ -5,13 +5,13 @@ public class FallState : BaseState
 {
     public FallState(StM_PlayerController player, StM_InputReader input) : base(player, input)
     {
-        input.Jump += OnJump;
+        
     }
 
 
     public override void OnEnter()
     {
-
+        _input.Jump += OnJump;
     }
     
     public override void FixedUpdate()
@@ -27,6 +27,7 @@ public class FallState : BaseState
         {
             _playerController.InitialJump = true;
         }
+        _input.Jump -= OnJump;
     }
     
     private void HandleFallGravity()
@@ -49,7 +50,7 @@ public class FallState : BaseState
     void OnJump(bool jumpisPressed)
     {
         if (jumpisPressed && _playerController.CoyoteTimeCounter.IsRunning)
-        { ;
+        { 
             _playerController.JumpTimer.Start();
         }
         if (jumpisPressed && !_playerController.JumpBufferTimeCounter.IsRunning && !_playerController.JumpWasPressedLastFrame)

@@ -8,7 +8,6 @@ public class JumpState : BaseState
 {
     public JumpState(StM_PlayerController player, StM_InputReader input) : base(player, input)
     {
-        _input.Jump += OnJump;
         _playerController.JumpMinTimer.OnTimerStop += () => CheckMinJumpTime();
     }
 
@@ -17,6 +16,7 @@ public class JumpState : BaseState
     public override void OnEnter()
     {
         _playerController.JumpMinTimer.Start();
+        _input.Jump += OnJump;
     }
     
     
@@ -33,6 +33,7 @@ public class JumpState : BaseState
         _playerController.CoyoteTimeCounter.Stop();
         _playerController.InitialJump = false;
         _minTime = false;
+        _input.Jump -= OnJump;
     }
     
     private void HandleJump()
