@@ -28,7 +28,7 @@ public class CharacterPaint : MonoBehaviour
 
         if (_input.PaintIsPressed && !_isPainting && _characterController.IsCrouching)
         {
-            Paint();
+            //Paint();
         }
         else if (!_input.PaintIsPressed)
         {
