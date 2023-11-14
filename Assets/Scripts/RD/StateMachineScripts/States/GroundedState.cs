@@ -8,6 +8,8 @@ public class GroundedState : BaseState
 
     public override void OnEnter()
     {
+        _playerController.PlayerFallTimer.Stop();
+        _playerController.PlayerFallTimer.Reset(_playerController.PlayerFallTimeMax);
         _playerController.InitialJump = false;
         _playerController.CoyoteTimeCounter.Stop();
         _playerController.JumpTimer.Reset();
@@ -30,8 +32,6 @@ public class GroundedState : BaseState
     {
          var gravity = 0.0f;
         _playerController.GravityFallCurrent = _playerController.GravityFallMin;
-        _playerController.PlayerFallTimer.Stop();
-        _playerController.PlayerFallTimer.Reset(_playerController.PlayerFallTimeMax);
         _playerController.PlayerMoveInputY = gravity;
     }
 
