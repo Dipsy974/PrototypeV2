@@ -107,6 +107,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Throw"",
+                    ""type"": ""Button"",
+                    ""id"": ""bfa24a0e-7673-442d-8518-eeab051d8f68"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -371,6 +380,28 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""UpLedge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ceeac266-b751-47b5-a8a8-cbcf6042bd48"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Throw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4639696-66f3-44ad-985e-5dde748b2da9"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Throw"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -921,6 +952,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_CharacterControls_Paint = m_CharacterControls.FindAction("Paint", throwIfNotFound: true);
         m_CharacterControls_DownLedge = m_CharacterControls.FindAction("DownLedge", throwIfNotFound: true);
         m_CharacterControls_UpLedge = m_CharacterControls.FindAction("UpLedge", throwIfNotFound: true);
+        m_CharacterControls_Throw = m_CharacterControls.FindAction("Throw", throwIfNotFound: true);
         // UIControls
         m_UIControls = asset.FindActionMap("UIControls", throwIfNotFound: true);
         m_UIControls_Navigate = m_UIControls.FindAction("Navigate", throwIfNotFound: true);
@@ -1002,6 +1034,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Paint;
     private readonly InputAction m_CharacterControls_DownLedge;
     private readonly InputAction m_CharacterControls_UpLedge;
+    private readonly InputAction m_CharacterControls_Throw;
     public struct CharacterControlsActions
     {
         private @InputActions m_Wrapper;
@@ -1015,6 +1048,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         public InputAction @Paint => m_Wrapper.m_CharacterControls_Paint;
         public InputAction @DownLedge => m_Wrapper.m_CharacterControls_DownLedge;
         public InputAction @UpLedge => m_Wrapper.m_CharacterControls_UpLedge;
+        public InputAction @Throw => m_Wrapper.m_CharacterControls_Throw;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1051,6 +1085,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @UpLedge.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnUpLedge;
                 @UpLedge.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnUpLedge;
                 @UpLedge.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnUpLedge;
+                @Throw.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnThrow;
+                @Throw.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnThrow;
+                @Throw.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnThrow;
             }
             m_Wrapper.m_CharacterControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -1082,6 +1119,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @UpLedge.started += instance.OnUpLedge;
                 @UpLedge.performed += instance.OnUpLedge;
                 @UpLedge.canceled += instance.OnUpLedge;
+                @Throw.started += instance.OnThrow;
+                @Throw.performed += instance.OnThrow;
+                @Throw.canceled += instance.OnThrow;
             }
         }
     }
@@ -1228,6 +1268,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnPaint(InputAction.CallbackContext context);
         void OnDownLedge(InputAction.CallbackContext context);
         void OnUpLedge(InputAction.CallbackContext context);
+        void OnThrow(InputAction.CallbackContext context);
     }
     public interface IUIControlsActions
     {

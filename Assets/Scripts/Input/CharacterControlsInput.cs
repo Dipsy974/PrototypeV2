@@ -16,6 +16,7 @@ public class CharacterControlsInput : MonoBehaviour
     public bool PaintIsPressed { get; private set; } = false; 
     
     public bool AttackIsPressed { get; private set; } = false; 
+    public bool ThrowIsPressed { get; private set; } = false; 
     
     public bool DownLedgeIsPressed { get; private set; } = false; 
     
@@ -40,8 +41,8 @@ public class CharacterControlsInput : MonoBehaviour
         _input.CharacterControls.Jump.canceled += SetJump;
         
         _input.CharacterControls.Attack.started += SetAttack;
-        _input.CharacterControls.Attack.canceled += SetAttack;
-
+        _input.CharacterControls.Attack.canceled += SetAttack; 
+        
         _input.CharacterControls.Paint.started += SetPaint;
         _input.CharacterControls.Paint.canceled += SetPaint;
         
@@ -55,6 +56,9 @@ public class CharacterControlsInput : MonoBehaviour
         _input.CharacterControls.UpLedge.started += SetUpLedge;
         _input.CharacterControls.UpLedge.performed += SetUpLedge;
         _input.CharacterControls.UpLedge.canceled += SetUpLedge;
+
+        _input.CharacterControls.Throw.started += SetThrow;
+        _input.CharacterControls.Throw.canceled += SetThrow;
     }
 
     private void OnDisable()
@@ -70,7 +74,10 @@ public class CharacterControlsInput : MonoBehaviour
         
         _input.CharacterControls.Attack.performed -= SetAttack;
         _input.CharacterControls.Attack.canceled -= SetAttack;
-
+        
+        _input.CharacterControls.Throw.started -= SetThrow;
+        _input.CharacterControls.Throw.canceled -= SetThrow;
+        
         _input.CharacterControls.Paint.started -= SetPaint;
         _input.CharacterControls.Paint.canceled -= SetPaint;
         
@@ -103,6 +110,10 @@ public class CharacterControlsInput : MonoBehaviour
     private void SetAttack(InputAction.CallbackContext ctx)
     {
         AttackIsPressed = ctx.started;
+    }
+    private void SetThrow(InputAction.CallbackContext ctx)
+    {
+        ThrowIsPressed = ctx.started;
     }
 
     private void SetPaint(InputAction.CallbackContext ctx)
