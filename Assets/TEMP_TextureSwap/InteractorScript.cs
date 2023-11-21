@@ -14,13 +14,13 @@ public class InteractorScript : MonoBehaviour
 
     private void Start()
     {
-        maxRadius = Random.Range(3f, 5f); 
+        //maxRadius = Random.Range(3f, 5f); 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (radius < maxRadius)
+        if (radius < maxRadius && isActive)
         {
             radius = Mathf.Lerp(radius, maxRadius, 0.03f); 
         }

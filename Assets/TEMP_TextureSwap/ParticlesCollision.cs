@@ -23,16 +23,18 @@ public class ParticlesCollision : MonoBehaviour
 
         InteractorObject interactorObj = other.GetComponent<InteractorObject>();
 
-        //if(interactorObj != null)
-        //{
-            for (int i = 0; i < numCollisionEvents; i++)
-            {
-                Vector3 pos = collisionEvents[i].intersection;
-                Instantiate(interactorPrefab, pos, Quaternion.identity); 
-            }
-            Debug.Log("ça touche"); 
-            //other.GetComponentInChildren<InteractorScript>().isActive = true; 
-        //}
+        if(interactorObj != null)
+        {
+            //for (int i = 0; i < numCollisionEvents; i++)
+            //{
+            //    Vector3 pos = collisionEvents[i].intersection;
+            //    Instantiate(interactorPrefab, pos, Quaternion.identity); 
+            //}
+            Debug.Log(interactorObj.transform.parent.gameObject);
+
+            GameObject parent = interactorObj.transform.root; 
+            interactorObj.SetObjectActive(); 
+        }
         
 
     }
