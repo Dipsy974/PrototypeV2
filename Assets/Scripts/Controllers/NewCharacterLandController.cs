@@ -11,7 +11,9 @@ public class NewCharacterLandController : MonoBehaviour
     private Rigidbody _rb;
     private CapsuleCollider _capsuleCollider;
     private Animator _animator;
-    public CameraController _camController; 
+    public CameraController _camController;
+
+    public ParticleSystem inkParticle; 
 
 
     //Movement variables
@@ -328,6 +330,9 @@ public class NewCharacterLandController : MonoBehaviour
             _playerIsJumping = true;
             _jumpBufferTimeCounter = 0.0f;
             _coyoteTimeCounter = 0.0f;
+
+            inkParticle.Play();
+            Debug.Log("je saute"); 
             
         }
         else if (_input.JumpIsPressed && _playerIsJumping && !_playerIsGrounded && _jumpTimeCounter > 0.0f)
