@@ -7,7 +7,7 @@ public class Target : MonoBehaviour
 {
     [SerializeField] private TargetSystem _targetSystem;
     [SerializeField] private Transform _playerTransform;
-    [SerializeField] private InteractorScript _interactor;
+    [SerializeField] private ColorableObject _colorable;
     private MeshRenderer _renderer;
     public bool isReachable, isActivated;
 
@@ -86,7 +86,8 @@ public class Target : MonoBehaviour
     {
         isActivated = true;
         _renderer.material.color = Color.green;
-        //_interactor.isActive = true;
+
+        _colorable.SetObjectActive();
         if (_targetSystem.reachableTargets.Contains(this))
         {
             _targetSystem.reachableTargets.Remove(this);
