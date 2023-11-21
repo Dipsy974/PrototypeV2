@@ -7,8 +7,9 @@ public class Target : MonoBehaviour
 {
     [SerializeField] private TargetSystem _targetSystem;
     [SerializeField] private Transform _playerTransform;
+    [SerializeField] private InteractorScript _interactor;
     private MeshRenderer _renderer;
-    public bool isReachable;
+    public bool isReachable, isActivated;
 
     private Camera _mainCam;
     private void OnEnable()
@@ -28,7 +29,7 @@ public class Target : MonoBehaviour
         Vector3 playerToObject = transform.position - _playerTransform.position;
         bool isBehindPlayer = Vector3.Dot(_mainCam.transform.forward, playerToObject) < 0;
 
-        if (Vector3.Distance(transform.position, _playerTransform.position) < _targetSystem.minReachDistance && !isBehindPlayer && !isReachable)
+        if (Vector3.Distance(transform.position, _playerTransform.position) < _targetSystem.minReachDistance && !isBehindPlayer && !isReachable && !isActivated)
         {
             isReachable = true;
             if (_targetSystem.visibleTargets.Contains(this))
@@ -47,11 +48,11 @@ public class Target : MonoBehaviour
         }
 
         //debug current target
-        if (_targetSystem.currentTarget == this)
+        if (_targetSystem.currentTarget == this && !isActivated)
         {
             _renderer.material.color = Color.red;
         }
-        else
+        else if (_targetSystem.currentTarget != this && !isActivated)
         {
             _renderer.material.color = Color.gray;
         }
@@ -78,6 +79,17 @@ public class Target : MonoBehaviour
             {
                 _targetSystem.reachableTargets.Remove(this);
             }
+        }
+    }
+
+    public void OnActivate()
+    {
+        isActivated = true;
+        _renderer.material.color = Color.green;
+        //_interactor.isActive = true;
+        if (_targetSystem.reachableTargets.Contains(this))
+        {
+            _targetSystem.reachableTargets.Remove(this);
         }
     }
 }

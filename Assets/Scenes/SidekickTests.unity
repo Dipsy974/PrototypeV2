@@ -230,7 +230,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 75754903}
-  m_LocalRotation: {x: 0.112676725, y: -0.000000017096804, z: 0.0000000019387583,
+  m_LocalRotation: {x: 0.112676725, y: 0.000000017096808, z: -0.0000000019387587,
     w: 0.9936317}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -291,7 +291,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-21746
+  m_Name: pb_Mesh31652
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2289,6 +2289,7 @@ GameObject:
   - component: {fileID: 1507944710}
   - component: {fileID: 1507944712}
   - component: {fileID: 1507944711}
+  - component: {fileID: 1507944713}
   m_Layer: 0
   m_Name: CorrectTrajectory
   m_TagString: Untagged
@@ -6023,7 +6024,7 @@ ParticleSystem:
   CollisionModule:
     enabled: 1
     serializedVersion: 4
-    type: 0
+    type: 1
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
@@ -6139,7 +6140,7 @@ ParticleSystem:
     m_EnergyLossOnCollision:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -6194,11 +6195,11 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 704
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -7149,6 +7150,18 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &1507944713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507944709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a129e3d3ea324408ca58b87560971c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1603396559
 GameObject:
   m_ObjectHideFlags: 3
