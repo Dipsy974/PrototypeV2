@@ -14,7 +14,7 @@ public class ThrowSystem : MonoBehaviour
 
     private void Update()
     {
-        if (_input.ThrowIsPressed)
+        if (_input.ThrowIsPressed && _targetSystem.currentTarget != null)
         {
             ThrowSidekick();
         }
