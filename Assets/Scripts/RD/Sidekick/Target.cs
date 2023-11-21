@@ -7,6 +7,7 @@ public class Target : MonoBehaviour
 {
     [SerializeField] private TargetSystem _targetSystem;
     [SerializeField] private Transform _playerTransform;
+    private MeshRenderer _renderer;
     public bool isReachable;
 
     private Camera _mainCam;
@@ -14,6 +15,7 @@ public class Target : MonoBehaviour
     {
         _targetSystem = FindObjectOfType<TargetSystem>();
         _playerTransform = FindObjectOfType<StM_PlayerController>().transform;
+        _renderer = GetComponent<MeshRenderer>();
     }
 
     private void Start()
@@ -42,6 +44,16 @@ public class Target : MonoBehaviour
             {
                 _targetSystem.reachableTargets.Remove(this);
             }
+        }
+
+        //debug current target
+        if (_targetSystem.currentTarget == this)
+        {
+            _renderer.material.color = Color.red;
+        }
+        else
+        {
+            _renderer.material.color = Color.gray;
         }
     }
 

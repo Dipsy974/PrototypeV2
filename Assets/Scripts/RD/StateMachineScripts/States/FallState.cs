@@ -30,6 +30,8 @@ public class FallState : BaseState
         {
             _playerController.InitialJump = true;
         }
+        _playerController.PlayerFallTimer.Stop();
+        _playerController.PlayerFallTimer.Reset(_playerController.PlayerFallTimeMax);
     }
     
     private void HandleFallGravity()
