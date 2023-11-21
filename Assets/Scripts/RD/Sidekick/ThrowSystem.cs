@@ -11,21 +11,38 @@ public class ThrowSystem : MonoBehaviour
     [SerializeField] private CharacterControlsInput _input;
 
     private Target _lockedTarget;
+    private bool _sidekickIsAvailable = true, _throwWasPressedLastFrame;
 
     private void Update()
     {
-        if (_input.ThrowIsPressed && _targetSystem.currentTarget != null)
+        if (_input.ThrowIsPressed && _sidekickIsAvailable && _targetSystem.currentTarget != null)
         {
             ThrowSidekick();
         }
+        else if (_input.ThrowIsPressed && !_throwWasPressedLastFrame && !_sidekickIsAvailable)
+        {
+            RetrieveSidekick();
+        }
     }
 
-    void ThrowSidekick()
+    private void LateUpdate()
+    {
+        _throwWasPressedLastFrame = _input.ThrowIsPressed;
+    }
+
+    private void ThrowSidekick()
     {
         _lockedTarget = _targetSystem.currentTarget;
         _correctTrajectoryEmission.transform.position = _lockedTarget.transform.position;
         var shape = _correctTrajectoryEmission.shape;
         shape.position = _correctTrajectoryEmission.transform.InverseTransformPoint(_sidekickThrowOrigin.position);
         _correctTrajectoryEmission.Play();
+        _sidekickIsAvailable = false;
+    }
+
+    private void RetrieveSidekick()
+    {
+        _sidekickIsAvailable = true;
+        Debug.Log("retrieve");
     }
 }
