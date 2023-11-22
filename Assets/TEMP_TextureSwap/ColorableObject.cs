@@ -20,6 +20,19 @@ public class ColorableObject : MonoBehaviour
     public void SetObjectActive()
     {
         GetComponentInChildren<InteractorScript>().isActive = true;
-        GetComponentInChildren<Animator>().SetBool("isActive", true);
+
+        if (GetComponent<GrowVines>())
+        {
+
+        }
+        else
+        {
+            GetComponentInChildren<Animator>().SetBool("isActive", true);
+        }
+
     }
+
 }
+
+
+

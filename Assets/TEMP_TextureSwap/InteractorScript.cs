@@ -8,7 +8,8 @@ public class InteractorScript : MonoBehaviour
     
     public float radius;
     public float maxRadius;
-    public bool isActive = false; 
+    public bool isActive = false;
+    private bool swapFinished = false;
 
 
 
@@ -20,10 +21,21 @@ public class InteractorScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (radius < maxRadius && isActive)
+        if (radius < maxRadius && isActive && !swapFinished)
         {
             radius = Mathf.Lerp(radius, maxRadius, 0.03f); 
         }
+
+        if((maxRadius - radius) <= 0.2f)
+        {
+            swapFinished = true; 
+        }
+
         //Shader.SetGlobalFloat("_RadiusInteractor", radius);
+    }
+
+    public bool GetSwapFinished()
+    {
+        return swapFinished; 
     }
 }
