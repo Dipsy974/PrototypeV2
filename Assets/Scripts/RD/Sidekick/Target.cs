@@ -86,8 +86,10 @@ public class Target : MonoBehaviour
     {
         isActivated = true;
         _renderer.material.color = Color.green;
-
-        _colorable.SetObjectActive();
+        if (_colorable != null)
+        {
+            _colorable.SetObjectActive();
+        }
         if (_targetSystem.reachableTargets.Contains(this))
         {
             _targetSystem.reachableTargets.Remove(this);
