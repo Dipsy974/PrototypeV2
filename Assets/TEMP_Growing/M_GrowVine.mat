@@ -21,6 +21,18 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _HatchingTex:
+        m_Texture: {fileID: 2800000, guid: f92b5ddd9321a6945ae43a8c66d838d9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 76d19c99114bff44795b1a83ce658801, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: d58ed05fd1381654ab636020df9ab5fc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -37,13 +49,21 @@ Material:
     m_Floats:
     - _Clip: 1
     - _Grow: 1
+    - _HatchingSpeed: 3
+    - _HatchingStrength: 0.2
     - _Metallic: 0
+    - _MoveSpeed: 0
+    - _NoiseScale: 1
+    - _NoiseStrength: 0.57
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RadiusCutoff: 0.21
     - _Scale: -0.02
     - _Smoothness: 0
     m_Colors:
     - _Color: {r: 0.35404396, g: 0.4716981, b: 0.3493236, a: 1}
+    - _HatchingOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _HatchingTiling: {r: 50, g: 50, b: 0, a: 0}
     - _Vector3: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &6683326591792403092

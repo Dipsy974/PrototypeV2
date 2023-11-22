@@ -8,7 +8,7 @@ public class InteractorEvent : MonoBehaviour
 {
     public event Action<InteractorEvent, InteractorEventArgs> OnColorationFinished;
 
-    public void CallInteractor(Vector2 moveDirection, float moveSpeed)
+    public void CallInteractor()
     {
         OnColorationFinished?.Invoke(this, new InteractorEventArgs() { });
     }

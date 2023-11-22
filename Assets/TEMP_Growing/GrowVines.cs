@@ -14,7 +14,7 @@ public class GrowVines : MonoBehaviour
     private List<Material> growVinesMaterials = new List<Material>();
     private bool fullyGrown;
 
-    private InteractorEvent interactorEvent;
+    public InteractorEvent interactorEvent;
 
 
     private void Awake()
@@ -99,5 +99,10 @@ public class GrowVines : MonoBehaviour
     private void OnEnable()
     {
         interactorEvent.OnColorationFinished += InteractorEvent_OnColorationFinished; 
+    }
+
+    private void OnDisable()
+    {
+        interactorEvent.OnColorationFinished -= InteractorEvent_OnColorationFinished;
     }
 }
